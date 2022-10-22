@@ -1,20 +1,24 @@
 //
-//  SearchEngineURLBuilderTests.swift
+//  SearchURLBuilderTests.swift
 //  
 //
-//  Created by Mauricio Cesar on 12/10/22.
+//  Created by Mauricio Cesar on 22/10/22.
 //
 
+import Foundation
 import XCTest
 import core_web_browser
 
-class SearchEngineURLBuilderTests: XCTestCase {
-    func test_buildURLFromTerm_deliversCorrectURL() {
-        let url1 = SearchEngineURLBuilder.buildURL(fromTerm: "computer")
-        let url2 = SearchEngineURLBuilder.buildURL(fromTerm: "computer science")
+class SearchURLBuilderTests: XCTestCase {
+    func test_makeURL_withCorrectURLText_deliversURL() {
+        let url = SearchURLBuilder.makeURL(from: "https://apple.com")
         
-        XCTAssertEqual(url1.absoluteString, "https://www.google.com/search?q=computer&ie=utf-8&oe=utf-8")
-        XCTAssertEqual(url2.absoluteString, "https://www.google.com/search?q=computer%20science&ie=utf-8&oe=utf-8")
+        XCTAssertEqual(url.absoluteString, "https://apple.com")
+    }
+    
+    func test_makeURL_withoutURLText_deliversSearchEngineURL() {
+        let url = SearchURLBuilder.makeURL(from: "apple")
+        
+        XCTAssertEqual(url.absoluteString, "https://www.google.com/search?q=apple&ie=utf-8&oe=utf-8")
     }
 }
-

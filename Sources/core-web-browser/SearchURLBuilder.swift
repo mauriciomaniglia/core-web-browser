@@ -1,5 +1,5 @@
 //
-//  SearchTextValidator.swift
+//  SearchURLBuilder.swift
 //  
 //
 //  Created by Mauricio Cesar on 22/10/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class SearchTextValidator {
+public final class SearchURLBuilder {
 
     public static func makeURL(from text: String) -> URL {
         if let url = URIFixup.getURL(text) {
