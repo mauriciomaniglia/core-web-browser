@@ -13,7 +13,7 @@ public final class SearchTextValidator {
         if let url = URIFixup.getURL(text) {
             return url
         } else {
-            return SearchURLBuilder.buildURL(fromTerm: text)
+            return SearchEngineURLBuilder.buildURL(fromTerm: text)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SearchURLBuilder.swift
+//  SearchEngineURLBuilder.swift
 //  
 //
 //  Created by Mauricio Cesar on 12/10/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class SearchURLBuilder {
+public final class SearchEngineURLBuilder {
     public static func buildURL(fromTerm query: String) -> URL {
         let searchTemplate = "https://www.google.com/search?q={searchTerms}&ie=utf-8&oe=utf-8"
         let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .searchTermsAllowed)!
