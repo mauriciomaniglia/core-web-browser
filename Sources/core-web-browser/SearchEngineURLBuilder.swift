@@ -1,10 +1,3 @@
-//
-//  SearchEngineURLBuilder.swift
-//  
-//
-//  Created by Mauricio Cesar on 12/10/22.
-//
-
 import Foundation
 
 public final class SearchEngineURLBuilder {

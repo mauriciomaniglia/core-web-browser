@@ -1,10 +1,3 @@
-//
-//  URIFixupTests.swift
-//  
-//
-//  Created by Mauricio Cesar on 25/09/22.
-//
-
 import XCTest
 import core_web_browser
 

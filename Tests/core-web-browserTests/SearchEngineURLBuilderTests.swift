@@ -1,10 +1,3 @@
-//
-//  SearchEngineURLBuilderTests.swift
-//  
-//
-//  Created by Mauricio Cesar on 12/10/22.
-//
-
 import XCTest
 import core_web_browser
 
