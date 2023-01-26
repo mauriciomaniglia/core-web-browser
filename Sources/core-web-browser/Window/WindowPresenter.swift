@@ -33,12 +33,15 @@ public class WindowPresenter {
     }
 
     public func didEndEditing() {
-        didUpdatePresentableModel?(.init(showCancelButton: false,
-                                         showReloadButton: false,
-                                         showWebView: false,
-                                         canGoBack: false,
-                                         canGoForward: false,
-                                         progressBar: nil))
+        let newPresentableModel = WindowPresentableModel(showCancelButton: false,
+                                                         showReloadButton: currentPresentableModel.showReloadButton,
+                                                         showWebView: currentPresentableModel.showWebView,
+                                                         canGoBack: currentPresentableModel.canGoBack,
+                                                         canGoForward: currentPresentableModel.canGoForward,
+                                                         progressBar: nil)
+        currentPresentableModel = newPresentableModel
+
+        didUpdatePresentableModel?(newPresentableModel)
     }
 
     public func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
