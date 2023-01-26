@@ -1,12 +1,3 @@
-public struct WindowPresentableModel {
-    public let showCancelButton: Bool
-    public let showReloadButton: Bool
-    public let showWebView: Bool
-    public let canGoBack: Bool
-    public let canGoForward: Bool
-    public let progressBar: Int?
-}
-
 public class WindowPresenter {
     public var didUpdatePresentableModel: ((WindowPresentableModel) -> Void)?
 
