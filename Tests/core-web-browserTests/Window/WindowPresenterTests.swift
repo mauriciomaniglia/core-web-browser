@@ -20,6 +20,15 @@ class WindowPresenter {
                                          canGoForward: false,
                                          progressBar: nil))
     }
+
+    func didStartEditing() {
+        didUpdatePresentableModel?(.init(showCancelButton: true,
+                                         showReloadButton: false,
+                                         showWebView: false,
+                                         canGoBack: false,
+                                         canGoForward: false,
+                                         progressBar: nil))
+    }
 }
 
 class WindowPresenterTests: XCTestCase {
@@ -32,6 +41,21 @@ class WindowPresenterTests: XCTestCase {
         sut.didStartNewWindow()
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertFalse(receivedResult!.showWebView)
+        XCTAssertFalse(receivedResult!.canGoBack)
+        XCTAssertFalse(receivedResult!.canGoForward)
+        XCTAssertNil(receivedResult!.progressBar)
+    }
+
+    func test_didStartEditing_deliversCorrectValues() {
+        let sut = WindowPresenter()
+        var receivedResult: WindowPresentableModel?
+        sut.didUpdatePresentableModel = { receivedResult = $0 }
+
+        sut.didStartEditing()
+
+        XCTAssertTrue(receivedResult!.showCancelButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
