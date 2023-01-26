@@ -38,6 +38,15 @@ class WindowPresenter {
                                          canGoForward: false,
                                          progressBar: nil))
     }
+
+    func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
+        didUpdatePresentableModel?(.init(showCancelButton: false,
+                                         showReloadButton: true,
+                                         showWebView: true,
+                                         canGoBack: canGoBack,
+                                         canGoForward: canGoForward,
+                                         progressBar: nil))
+    }
 }
 
 class WindowPresenterTests: XCTestCase {
@@ -84,6 +93,21 @@ class WindowPresenterTests: XCTestCase {
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
+        XCTAssertNil(receivedResult!.progressBar)
+    }
+
+    func test_didLoadPage_deliversCorrectValues() {
+        let sut = WindowPresenter()
+        var receivedResult: WindowPresentableModel?
+        sut.didUpdatePresentableModel = { receivedResult = $0 }
+
+        sut.didLoadPage(canGoBack: true, canGoForward: true)
+
+        XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertTrue(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showWebView)
+        XCTAssertTrue(receivedResult!.canGoBack)
+        XCTAssertTrue(receivedResult!.canGoForward)
         XCTAssertNil(receivedResult!.progressBar)
     }
 }
