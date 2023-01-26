@@ -1,7 +1,15 @@
 public class WindowPresenter {
     public var didUpdatePresentableModel: ((WindowPresentableModel) -> Void)?
+    private var currentPresentableModel: WindowPresentableModel
 
-    public init() {}
+    public init() {
+        currentPresentableModel = WindowPresentableModel(showCancelButton: false,
+                                                         showReloadButton: false,
+                                                         showWebView: false,
+                                                         canGoBack: false,
+                                                         canGoForward: false,
+                                                         progressBar: nil)
+    }
 
     public func didStartNewWindow() {
         didUpdatePresentableModel?(.init(showCancelButton: false,
@@ -13,12 +21,15 @@ public class WindowPresenter {
     }
 
     public func didStartEditing() {
-        didUpdatePresentableModel?(.init(showCancelButton: true,
-                                         showReloadButton: false,
-                                         showWebView: false,
-                                         canGoBack: false,
-                                         canGoForward: false,
-                                         progressBar: nil))
+        let newPresentableModel = WindowPresentableModel(showCancelButton: true,
+                                                         showReloadButton: false,
+                                                         showWebView: currentPresentableModel.showWebView,
+                                                         canGoBack: currentPresentableModel.canGoBack,
+                                                         canGoForward: currentPresentableModel.canGoForward,
+                                                         progressBar: nil)
+        currentPresentableModel = newPresentableModel
+
+        didUpdatePresentableModel?(newPresentableModel)
     }
 
     public func didEndEditing() {
@@ -31,12 +42,15 @@ public class WindowPresenter {
     }
 
     public func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
-        didUpdatePresentableModel?(.init(showCancelButton: false,
-                                         showReloadButton: true,
-                                         showWebView: true,
-                                         canGoBack: canGoBack,
-                                         canGoForward: canGoForward,
-                                         progressBar: nil))
+        let newPresentableModel = WindowPresentableModel(showCancelButton: false,
+                                                         showReloadButton: true,
+                                                         showWebView: true,
+                                                         canGoBack: canGoBack,
+                                                         canGoForward: canGoForward,
+                                                         progressBar: nil)
+        currentPresentableModel = newPresentableModel
+
+        didUpdatePresentableModel?(newPresentableModel)
     }
 
     public func didUpdateProgressBar(_ value: Int) {

@@ -33,6 +33,22 @@ class WindowPresenterTests: XCTestCase {
         XCTAssertNil(receivedResult!.progressBar)
     }
 
+    func test_didStartEditing_deliversCorrectValuesWithPageAlreadyLoaded() {
+        let sut = WindowPresenter()
+        var receivedResult: WindowPresentableModel?
+        sut.didUpdatePresentableModel = { receivedResult = $0 }
+
+        sut.didLoadPage(canGoBack: true, canGoForward: true)
+        sut.didStartEditing()
+
+        XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showWebView)
+        XCTAssertTrue(receivedResult!.canGoBack)
+        XCTAssertTrue(receivedResult!.canGoForward)
+        XCTAssertNil(receivedResult!.progressBar)
+    }
+
     func test_didEndEditing_deliversCorrectValues() {
         let sut = WindowPresenter()
         var receivedResult: WindowPresentableModel?
