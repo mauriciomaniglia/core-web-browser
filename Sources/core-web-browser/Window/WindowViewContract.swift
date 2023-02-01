@@ -1,4 +1,4 @@
-protocol WindowViewContract {
+public protocol WindowViewContract {
     func didRequestSearch(_ text: String)
     func didStartTyping()
     func didEndTyping()
