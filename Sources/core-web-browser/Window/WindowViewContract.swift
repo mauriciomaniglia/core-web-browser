@@ -1,5 +1,7 @@
 protocol WindowViewContract {
-    func didTapSearch(_ text: String)
+    func didRequestSearch(_ text: String)
+    func didStartTyping()
+    func didEndTyping()
     func didTapBackButton()
     func didTapForwardButton()
 }
