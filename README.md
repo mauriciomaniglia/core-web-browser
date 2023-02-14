@@ -6,6 +6,7 @@ iOS: https://github.com/mauriciomaniglia/ios-web-browser
 
 MacOS: https://github.com/mauriciomaniglia/mac-web-browser
 
-## Current components
-![Current components](core-web-view-diagram.jpg)
+## Current Architecture
+
+![App Current Architecture](core-module-current-architecture.jpg)
 
