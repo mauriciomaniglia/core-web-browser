@@ -11,7 +11,7 @@ public final class WebViewProxy: NSObject {
     public init(webView: WKWebView) {
         self.webView = webView
         super.init()
-        self.webView.navigationDelegate = self
+        registerObserversForWebView()
     }
 
     public func sendText(_ text: String) {
@@ -34,11 +34,26 @@ public final class WebViewProxy: NSObject {
     public func canGoForward() -> Bool {
         webView.canGoForward
     }
-}
 
-extension WebViewProxy: WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        delegate?.didLoadPage()
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        guard let keyPath = keyPath else { return }
+
+        switch keyPath {
+        case #keyPath(WKWebView.url),
+            #keyPath(WKWebView.canGoBack),
+            #keyPath(WKWebView.canGoForward):
+            delegate?.didLoadPage()
+        default:
+            break
+        }
+    }
+
+    // MARK: Private methods
+
+    private func registerObserversForWebView() {
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), context: nil)
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), context: nil)
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), context: nil)
     }
 }
 

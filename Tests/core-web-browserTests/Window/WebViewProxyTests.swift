@@ -13,6 +13,13 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(delegate.receivedMessages, [])
     }
 
+    func test_init_registerCorrectObserversForWebViewEvents() {
+        let webView = WebViewSpy()
+        _ = WebViewProxy(webView: webView)
+
+        XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward"])
+    }
+
     func test_sendText_makeWebViewVisible() {
         let webView = WebViewSpy()
         let sut = WebViewProxy(webView: webView)
@@ -71,13 +78,52 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertTrue(webView.canGoForward)
     }
 
-    func test_webViewDidCommit_sendsDelegatePageDidLoad() {
+    func test_observeValueForKeyPath_whenKeyPathIsEmptyDontSendAnyMessage() {
         let delegate = WebViewProxyProtocolSpy()
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let sut = WebViewProxy(webView: WebViewSpy())
         sut.delegate = delegate
 
-        sut.webView(webView, didCommit: navigation)
+        sut.observeValue(forKeyPath: nil, of: nil, change: nil, context: nil)
+
+        XCTAssertEqual(delegate.receivedMessages, [])
+    }
+
+    func test_observeValueForKeyPath_whenKeyPathIsNotValidDontSendAnyMessage() {
+        let delegate = WebViewProxyProtocolSpy()
+        let sut = WebViewProxy(webView: WebViewSpy())
+        sut.delegate = delegate
+
+        sut.observeValue(forKeyPath: "any", of: nil, change: nil, context: nil)
+
+        XCTAssertEqual(delegate.receivedMessages, [])
+    }
+
+    func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewURLChange() {
+        let delegate = WebViewProxyProtocolSpy()
+        let sut = WebViewProxy(webView: WebViewSpy())
+        sut.delegate = delegate
+
+        sut.observeValue(forKeyPath: #keyPath(WKWebView.url), of: nil, change: nil, context: nil)
+
+        XCTAssertEqual(delegate.receivedMessages, [.didLoadPage])
+    }
+
+    func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewCanGoBackChange() {
+        let delegate = WebViewProxyProtocolSpy()
+        let sut = WebViewProxy(webView: WebViewSpy())
+        sut.delegate = delegate
+
+        sut.observeValue(forKeyPath: #keyPath(WKWebView.canGoBack), of: nil, change: nil, context: nil)
+
+        XCTAssertEqual(delegate.receivedMessages, [.didLoadPage])
+    }
+
+    func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewCanGoForwardChange() {
+        let delegate = WebViewProxyProtocolSpy()
+        let sut = WebViewProxy(webView: WebViewSpy())
+        sut.delegate = delegate
+
+        sut.observeValue(forKeyPath: #keyPath(WKWebView.canGoForward), of: nil, change: nil, context: nil)
 
         XCTAssertEqual(delegate.receivedMessages, [.didLoadPage])
     }
@@ -92,6 +138,7 @@ class WebViewProxyTests: XCTestCase {
         }
 
         var receivedMessages = [Message]()
+        var registeredObservers = [String]()
         var canGoBackMock = false
         var canGoForwardMock = false
 
@@ -116,6 +163,10 @@ class WebViewProxyTests: XCTestCase {
 
         override var canGoForward: Bool {
             return canGoForwardMock
+        }
+
+        override func addObserver(_ observer: NSObject, forKeyPath keyPath: String, options: NSKeyValueObservingOptions = [], context: UnsafeMutableRawPointer?) {
+            registeredObservers.append(keyPath)
         }
     }
 
