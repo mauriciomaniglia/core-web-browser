@@ -32,4 +32,8 @@ extension WindowViewAdapter: WebViewProxyProtocol {
     public func didLoadPage() {
         presenter.didLoadPage(canGoBack: webViewProxy.canGoBack(), canGoForward: webViewProxy.canGoForward())
     }
+
+    public func didUpdateLoadingProgress(_ progress: Double) {
+        presenter.didUpdateProgressBar(progress)
+    }
 }

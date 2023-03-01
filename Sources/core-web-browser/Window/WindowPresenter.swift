@@ -56,7 +56,7 @@ public class WindowPresenter {
         didUpdatePresentableModel?(newPresentableModel)
     }
 
-    public func didUpdateProgressBar(_ value: Int) {
+    public func didUpdateProgressBar(_ value: Double) {
         didUpdatePresentableModel?(.init(showCancelButton: true,
                                          showReloadButton: false,
                                          showWebView: true,

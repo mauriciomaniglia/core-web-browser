@@ -128,6 +128,17 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(delegate.receivedMessages, [.didLoadPage])
     }
 
+    func test_observeValueForKeyPath_sendsCorrectMessageWhenLoadingProgressUpdates() {
+        let delegate = WebViewProxyProtocolSpy()
+        let sut = WebViewProxy(webView: WebViewSpy())
+        sut.delegate = delegate
+
+        sut.observeValue(forKeyPath: #keyPath(WKWebView.estimatedProgress), of: nil, change: nil, context: nil)
+
+        XCTAssertEqual(delegate.receivedMessages, [.didUpdateLoadingProgress(0)])
+    }
+    
+
     // MARK: - Helpers
 
     private class WebViewSpy: WKWebView {
@@ -171,14 +182,19 @@ class WebViewProxyTests: XCTestCase {
     }
 
     private class WebViewProxyProtocolSpy: WebViewProxyProtocol {
-        enum Message {
+        enum Message: Equatable {
             case didLoadPage
+            case didUpdateLoadingProgress(_: Double)
         }
 
         var receivedMessages = [Message]()
 
         func didLoadPage() {
             receivedMessages.append(.didLoadPage)
+        }
+
+        func didUpdateLoadingProgress(_ progress: Double) {
+            receivedMessages.append(.didUpdateLoadingProgress(progress))
         }
     }
 }
