@@ -17,7 +17,7 @@ class WebViewProxyTests: XCTestCase {
         let webView = WebViewSpy()
         _ = WebViewProxy(webView: webView)
 
-        XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward"])
+        XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward", "estimatedProgress"])
     }
 
     func test_sendText_makeWebViewVisible() {

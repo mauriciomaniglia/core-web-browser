@@ -55,6 +55,7 @@ public final class WebViewProxy: NSObject {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), context: nil)
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
 }
 
