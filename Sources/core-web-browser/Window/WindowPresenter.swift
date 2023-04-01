@@ -60,8 +60,8 @@ public class WindowPresenter {
         didUpdatePresentableModel?(.init(showCancelButton: true,
                                          showReloadButton: false,
                                          showWebView: true,
-                                         canGoBack: false,
-                                         canGoForward: false,
+                                         canGoBack: currentPresentableModel.canGoBack,
+                                         canGoForward: currentPresentableModel.canGoForward,
                                          progressBar: value))
     }
 }

@@ -125,4 +125,20 @@ class WindowPresenterTests: XCTestCase {
         XCTAssertFalse(receivedResult!.canGoForward)
         XCTAssertEqual(receivedResult!.progressBar, 45)
     }
+
+    func test_didUpdateProgressBar_whenNavigationUpdates_deliversCorrectValues() {
+        let sut = WindowPresenter()
+        var receivedResult: WindowPresentableModel?
+        sut.didUpdatePresentableModel = { receivedResult = $0 }
+
+        sut.didLoadPage(canGoBack: true, canGoForward: true)
+        sut.didUpdateProgressBar(45)
+
+        XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showWebView)
+        XCTAssertTrue(receivedResult!.canGoBack)
+        XCTAssertTrue(receivedResult!.canGoForward)
+        XCTAssertEqual(receivedResult!.progressBar, 45)
+    }
 }
