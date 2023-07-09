@@ -8,6 +8,7 @@ public final class WindowViewAdapter: WindowViewContract {
     }
 
     public func didRequestSearch(_ text: String) {
+        webViewProxy.showWebView()
         webViewProxy.sendText(text)
     }
 

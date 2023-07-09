@@ -20,12 +20,12 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward", "estimatedProgress"])
     }
 
-    func test_sendText_makeWebViewVisible() {
+    func test_showWebView_makeWebViewVisible() {
         let webView = WebViewSpy()
         let sut = WebViewProxy(webView: webView)
         webView.isHidden = true
 
-        sut.sendText("some text")
+        sut.showWebView()
 
         XCTAssertFalse(webView.isHidden)
     }

@@ -15,8 +15,11 @@ public final class WebViewProxy: NSObject {
         registerObserversForWebView()
     }
 
-    public func sendText(_ text: String) {
+    public func showWebView() {
         webView.isHidden = false
+    }
+
+    public func sendText(_ text: String) {
         webView.load(URLRequest(url: SearchURLBuilder.makeURL(from: text)))
     }
 
