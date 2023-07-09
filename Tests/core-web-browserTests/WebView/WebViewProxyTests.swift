@@ -6,23 +6,19 @@ class WebViewProxyTests: XCTestCase {
     let navigation = WKNavigation()
 
     func test_init_doesNotSendAnyMessage() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (_, _, delegate) = makeSUT()
 
         XCTAssertEqual(delegate.receivedMessages, [])
     }
 
     func test_init_registerCorrectObserversForWebViewEvents() {
-        let webView = WebViewSpy()
-        _ = WebViewProxy(webView: webView)
+        let (_, webView, _) = makeSUT()
 
         XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward", "estimatedProgress"])
     }
 
     func test_showWebView_makeWebViewVisible() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
         webView.isHidden = true
 
         sut.showWebView()
@@ -31,8 +27,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_sendText_sendsCorrectRequest() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
         webView.isHidden = true
 
         sut.sendText("https://openai.com")
@@ -41,8 +36,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_didTapBackButton_requestToGoBackToPreviousPage() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
 
         sut.didTapBackButton()
 
@@ -50,8 +44,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_didTapForwardButton_requestNextPage() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
 
         sut.didTapForwardButton()
 
@@ -59,8 +52,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_canGoBack_deliversCorrectResult() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
         webView.canGoBackMock = true
 
         _ = sut.canGoBack()
@@ -69,8 +61,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_canGoForward_deliversCorrectResult() {
-        let webView = WebViewSpy()
-        let sut = WebViewProxy(webView: webView)
+        let (sut, webView, _) = makeSUT()
         webView.canGoForwardMock = true
 
         _ = sut.canGoForward()
@@ -79,9 +70,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_whenKeyPathIsEmptyDontSendAnyMessage() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: nil, of: nil, change: nil, context: nil)
 
@@ -89,9 +78,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_whenKeyPathIsNotValidDontSendAnyMessage() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: "any", of: nil, change: nil, context: nil)
 
@@ -99,9 +86,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewURLChange() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: #keyPath(WKWebView.url), of: nil, change: nil, context: nil)
 
@@ -109,9 +94,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewCanGoBackChange() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: #keyPath(WKWebView.canGoBack), of: nil, change: nil, context: nil)
 
@@ -119,9 +102,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_sendsCorrectMessageWhenWebViewCanGoForwardChange() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: #keyPath(WKWebView.canGoForward), of: nil, change: nil, context: nil)
 
@@ -129,9 +110,7 @@ class WebViewProxyTests: XCTestCase {
     }
 
     func test_observeValueForKeyPath_sendsCorrectMessageWhenLoadingProgressUpdates() {
-        let delegate = WebViewProxyProtocolSpy()
-        let sut = WebViewProxy(webView: WebViewSpy())
-        sut.delegate = delegate
+        let (sut, _, delegate) = makeSUT()
 
         sut.observeValue(forKeyPath: #keyPath(WKWebView.estimatedProgress), of: nil, change: nil, context: nil)
 
@@ -140,6 +119,15 @@ class WebViewProxyTests: XCTestCase {
     
 
     // MARK: - Helpers
+
+    private func makeSUT() -> (sut: WebViewProxy, webView: WebViewSpy, delegate: WebViewProxyProtocolSpy) {
+        let delegate = WebViewProxyProtocolSpy()
+        let webView = WebViewSpy()
+        let sut = WebViewProxy(webView: webView)
+        sut.delegate = delegate
+
+        return (sut, webView, delegate)
+    }
 
     private class WebViewSpy: WKWebView {
         enum Message: Equatable {
