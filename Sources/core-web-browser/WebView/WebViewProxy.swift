@@ -27,7 +27,11 @@ public final class WebViewProxy: NSObject {
 
     public func registerRules(_ rules: [WebViewRule]) {
         for rule in rules {
-            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: {_, _ in })
+            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: {ruleList, _ in
+                if ruleList != nil { return }
+
+                self.ruleStore.compileContentRuleList(forIdentifier: rule.rawValue, encodedContentRuleList: "", completionHandler: {_, _ in })
+            })
         }
     }
 

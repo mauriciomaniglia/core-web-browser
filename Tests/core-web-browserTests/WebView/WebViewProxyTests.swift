@@ -135,6 +135,27 @@ class WebViewProxyTests: XCTestCase {
                                                     .lookUpContentRuleList(identifier: "social")])
     }
 
+    func test_registerRules_whenRulesAreAlreadyRegisteredDoNotRegisterAgain() {
+        let (sut, _, ruleStore, _) = makeSUT()
+        ruleStore.compileContentRuleList(forIdentifier: WebViewRule.advertising.rawValue, encodedContentRuleList: "[]", completionHandler: {_, _ in })
+        ruleStore.receivedMessages = []
+
+        sut.registerRules([.advertising])
+        ruleStore.simulateLookUpContentRuleListWithRegisteredItem()
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
+    }
+
+    func test_registerRules_whenRuleIsNotRegisteredThenRequestRegistration() {
+        let (sut, _, ruleStore, _) = makeSUT()
+
+        sut.registerRules([.advertising])
+        ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),
+                                                    .compileContentRuleList(identifier: "advertising")])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (
@@ -195,12 +216,28 @@ class WebViewProxyTests: XCTestCase {
     private class WKContentRuleListStoreSpy: WKContentRuleListStore {
         enum Message: Equatable {
             case lookUpContentRuleList(identifier: String)
+            case compileContentRuleList(identifier: String)
         }
 
         var receivedMessages = [Message]()
+        var lookUpContentRuleListCompletion: ((WKContentRuleList?, Error?) -> Void)?
 
         override func lookUpContentRuleList(forIdentifier identifier: String!, completionHandler: ((WKContentRuleList?, Error?) -> Void)!) {
+            lookUpContentRuleListCompletion = completionHandler
             receivedMessages.append(.lookUpContentRuleList(identifier: identifier))
+        }
+
+        override func compileContentRuleList(forIdentifier identifier: String!, encodedContentRuleList: String!, completionHandler: ((WKContentRuleList?, Error?) -> Void)!) {
+            receivedMessages.append(.compileContentRuleList(identifier: identifier))
+            super.compileContentRuleList(forIdentifier: identifier, encodedContentRuleList: encodedContentRuleList, completionHandler: completionHandler)
+        }
+
+        func simulateLookUpContentRuleListWithRegisteredItem() {
+            lookUpContentRuleListCompletion?(WKContentRuleList(), nil)
+        }
+
+        func simulateLookUpContentRuleListWithUnregisteredItem() {
+            lookUpContentRuleListCompletion?(nil, nil)
         }
     }
 
