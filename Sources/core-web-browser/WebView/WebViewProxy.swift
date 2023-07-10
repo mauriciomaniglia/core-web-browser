@@ -7,10 +7,12 @@ public protocol WebViewProxyProtocol {
 
 public final class WebViewProxy: NSObject {
     public var delegate: WebViewProxyProtocol?
-    internal let webView: WKWebView
+    let webView: WKWebView
+    let ruleStore: WKContentRuleListStore
 
-    public init(webView: WKWebView) {
+    public init(webView: WKWebView, ruleStore: WKContentRuleListStore) {
         self.webView = webView
+        self.ruleStore = ruleStore
         super.init()
         registerObserversForWebView()
     }
