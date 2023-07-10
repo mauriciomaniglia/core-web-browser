@@ -116,7 +116,14 @@ class WebViewProxyTests: XCTestCase {
 
         XCTAssertEqual(delegate.receivedMessages, [.didUpdateLoadingProgress(0)])
     }
-    
+
+    func test_registerRules_whenRulesAreEmptyDoNotSendAnyMessage() {
+        let (sut, _, ruleStore, _) = makeSUT()
+
+        sut.registerRules([])
+
+        XCTAssertEqual(ruleStore.receivedMessages, [])
+    }
 
     // MARK: - Helpers
 
@@ -176,7 +183,11 @@ class WebViewProxyTests: XCTestCase {
     }
 
     private class WKContentRuleListStoreSpy: WKContentRuleListStore {
+        enum Message: Equatable {
+            
+        }
 
+        var receivedMessages = [Message]()
     }
 
     private class WebViewProxyProtocolSpy: WebViewProxyProtocol {

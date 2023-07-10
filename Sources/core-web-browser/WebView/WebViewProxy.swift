@@ -1,5 +1,9 @@
 import WebKit
 
+public enum WebViewRule {
+
+}
+
 public protocol WebViewProxyProtocol {
     func didLoadPage()
     func didUpdateLoadingProgress(_ progress: Double)
@@ -16,6 +20,8 @@ public final class WebViewProxy: NSObject {
         super.init()
         registerObserversForWebView()
     }
+
+    public func registerRules(_ rules: [WebViewRule]) {}
 
     public func showWebView() {
         webView.isHidden = false
