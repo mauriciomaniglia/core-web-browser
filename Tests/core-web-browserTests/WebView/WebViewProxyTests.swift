@@ -125,6 +125,16 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(ruleStore.receivedMessages, [])
     }
 
+    func test_registerRules_whenThereAreRulesCheckIfTheyAreRegistered() {
+        let (sut, _, ruleStore, _) = makeSUT()
+
+        sut.registerRules([.advertising, .analytics, .social])
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),
+                                                    .lookUpContentRuleList(identifier: "analytics"),
+                                                    .lookUpContentRuleList(identifier: "social")])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (
@@ -184,10 +194,14 @@ class WebViewProxyTests: XCTestCase {
 
     private class WKContentRuleListStoreSpy: WKContentRuleListStore {
         enum Message: Equatable {
-            
+            case lookUpContentRuleList(identifier: String)
         }
 
         var receivedMessages = [Message]()
+
+        override func lookUpContentRuleList(forIdentifier identifier: String!, completionHandler: ((WKContentRuleList?, Error?) -> Void)!) {
+            receivedMessages.append(.lookUpContentRuleList(identifier: identifier))
+        }
     }
 
     private class WebViewProxyProtocolSpy: WebViewProxyProtocol {

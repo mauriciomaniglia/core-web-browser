@@ -1,7 +1,11 @@
 import WebKit
 
-public enum WebViewRule {
-
+public enum WebViewRule: String {
+    case advertising
+    case analytics
+    case social
+    case cryptomining
+    case fingerprinting
 }
 
 public protocol WebViewProxyProtocol {
@@ -21,7 +25,11 @@ public final class WebViewProxy: NSObject {
         registerObserversForWebView()
     }
 
-    public func registerRules(_ rules: [WebViewRule]) {}
+    public func registerRules(_ rules: [WebViewRule]) {
+        for rule in rules {
+            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: {_, _ in })
+        }
+    }
 
     public func showWebView() {
         webView.isHidden = false
