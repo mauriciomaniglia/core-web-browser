@@ -6,6 +6,21 @@ public enum WebViewRule: String {
     case social
     case cryptomining
     case fingerprinting
+
+    func content() -> String {
+        switch self {
+        case .advertising:
+            return blockAdvertising
+        case .analytics:
+            return blockAnalytics
+        case .social:
+            return blockSocial
+        case .cryptomining:
+            return blockCryptomining
+        case .fingerprinting:
+            return blockFingerprinting
+        }
+    }
 }
 
 public protocol WebViewProxyProtocol {
@@ -30,7 +45,7 @@ public final class WebViewProxy: NSObject {
             ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: {ruleList, _ in
                 if ruleList != nil { return }
 
-                self.ruleStore.compileContentRuleList(forIdentifier: rule.rawValue, encodedContentRuleList: "", completionHandler: {_, _ in })
+                self.ruleStore.compileContentRuleList(forIdentifier: rule.rawValue, encodedContentRuleList: rule.content(), completionHandler: {_, _ in })
             })
         }
     }
