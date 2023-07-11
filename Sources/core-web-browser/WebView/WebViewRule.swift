@@ -4,6 +4,9 @@ public enum WebViewRule: String {
     case social
     case cryptomining
     case fingerprinting
+    case advertisingCookies
+    case analyticsCookies
+    case socialCookies
 
     func content() -> String {
         switch self {
@@ -17,6 +20,12 @@ public enum WebViewRule: String {
             return blockCryptomining
         case .fingerprinting:
             return blockFingerprinting
+        case .advertisingCookies:
+            return blockCookiesAdvertising
+        case .analyticsCookies:
+            return blockCookiesAnalytics
+        case .socialCookies:
+            return blockCookiesSocial
         }
     }
 }
