@@ -156,6 +156,36 @@ class WebViewProxyTests: XCTestCase {
                                                     .compileContentRuleList(identifier: "advertising")])
     }
 
+    func test_applyRules_whenRuleAreNotRegisterDoNotApplyRule() {
+        let contentController = WKUserContentControllerSpy()
+        let configuration = WKWebViewConfigurationDummy()
+        configuration.userContentController = contentController
+        let webView = WebViewSpy(frame: .zero, configuration: configuration)
+        let ruleStore = WKContentRuleListStoreSpy()
+        let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
+
+        sut.applyRules([.advertising])
+        ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
+        XCTAssertEqual(contentController.reveivedMessages, [])
+    }
+
+    func test_applyRules_whenRuleAreRegisterApplyRuleToWebView() {
+        let contentController = WKUserContentControllerSpy()
+        let configuration = WKWebViewConfigurationDummy()
+        configuration.userContentController = contentController
+        let webView = WebViewSpy(frame: .zero, configuration: configuration)
+        let ruleStore = WKContentRuleListStoreSpy()
+        let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
+
+        sut.applyRules([.advertising])
+        ruleStore.simulateLookUpContentRuleListWithRegisteredItem()
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
+        XCTAssertEqual(contentController.reveivedMessages, [.add])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (
@@ -171,6 +201,20 @@ class WebViewProxyTests: XCTestCase {
         sut.delegate = delegate
 
         return (sut, webView, ruleStore, delegate)
+    }
+
+    private class WKWebViewConfigurationDummy: WKWebViewConfiguration {}
+
+    private class WKUserContentControllerSpy: WKUserContentController {
+        enum Message {
+            case add
+        }
+
+        var reveivedMessages: [Message] = []
+
+        override func add(_ contentRuleList: WKContentRuleList) {
+            reveivedMessages.append(.add)
+        }
     }
 
     private class WebViewSpy: WKWebView {
