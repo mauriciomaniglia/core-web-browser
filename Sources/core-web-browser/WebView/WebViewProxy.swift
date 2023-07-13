@@ -7,16 +7,41 @@ public protocol WebViewProxyProtocol {
 
 public final class WebViewProxy: NSObject {
     public var delegate: WebViewProxyProtocol?
-    internal let webView: WKWebView
+    let webView: WKWebView
+    let ruleStore: WKContentRuleListStore
 
-    public init(webView: WKWebView) {
+    public init(webView: WKWebView, ruleStore: WKContentRuleListStore) {
         self.webView = webView
+        self.ruleStore = ruleStore
         super.init()
         registerObserversForWebView()
     }
 
-    public func sendText(_ text: String) {
+    public func registerRules(_ rules: [WebViewRule]) {
+        for rule in rules {
+            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: { ruleList, _ in
+                if ruleList != nil { return }
+
+                self.ruleStore.compileContentRuleList(forIdentifier: rule.rawValue, encodedContentRuleList: rule.content(), completionHandler: {_, _ in })
+            })
+        }
+    }
+
+    public func applyRules(_ rules: [WebViewRule]) {
+        for rule in rules {
+            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: { ruleList, _ in
+                guard let ruleList = ruleList else { return }
+
+                self.webView.configuration.userContentController.add(ruleList)
+            })
+        }
+    }
+
+    public func showWebView() {
         webView.isHidden = false
+    }
+
+    public func sendText(_ text: String) {
         webView.load(URLRequest(url: SearchURLBuilder.makeURL(from: text)))
     }
 
