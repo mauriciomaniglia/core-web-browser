@@ -30,7 +30,7 @@ class WebViewProxyTests: XCTestCase {
         let (sut, webView, _, _) = makeSUT()
         webView.isHidden = true
 
-        sut.sendText("https://openai.com")
+        sut.load(URL(string: "https://openai.com")!)
 
         XCTAssertEqual(webView.receivedMessages, [.load("https://openai.com")])
     }

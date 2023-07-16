@@ -41,8 +41,8 @@ public final class WebViewProxy: NSObject {
         webView.isHidden = false
     }
 
-    public func sendText(_ text: String) {
-        webView.load(URLRequest(url: SearchURLBuilder.makeURL(from: text)))
+    public func load(_ url: URL) {
+        webView.load(URLRequest(url: url))
     }
 
     public func didTapBackButton() {
