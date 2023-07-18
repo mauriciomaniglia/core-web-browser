@@ -5,7 +5,7 @@ public protocol WebViewProxyDelegate {
     func didUpdateLoadingProgress(_ progress: Double)
 }
 
-public final class WebViewProxy: NSObject {
+public final class WebViewProxy: NSObject, WebViewContract {
     public var delegate: WebViewProxyDelegate?
     let webView: WKWebView
     let ruleStore: WKContentRuleListStore
