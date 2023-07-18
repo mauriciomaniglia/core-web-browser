@@ -48,6 +48,15 @@ class WindowViewAdapterTests: XCTestCase {
         XCTAssertEqual(webView.receivedMessages, [.didTapForwardButton])
     }
 
+    func test_didLoadPage_sendsCorrectMessages() {
+        let (sut, webView, presenter) = makeSUT()
+
+        sut.didLoadPage()
+
+        XCTAssertEqual(webView.receivedMessages, [.canGoBack, .canGoForward])
+        XCTAssertEqual(presenter.receivedMessages, [.didLoadPage(canGoBack: true, canGoForward: true)])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: WindowViewAdapter, webView: WebViewSpy, presenter: WindowPresenterSpy) {
@@ -65,6 +74,8 @@ private class WebViewSpy: WebViewContract {
         case load(url: URL)
         case didTapBackButton
         case didTapForwardButton
+        case canGoBack
+        case canGoForward
     }
 
     var receivedMessages = [Message]()
@@ -94,10 +105,12 @@ private class WebViewSpy: WebViewContract {
     }
 
     func canGoBack() -> Bool {
+        receivedMessages.append(.canGoBack)
         return true
     }
 
     func canGoForward() -> Bool {
+        receivedMessages.append(.canGoForward)
         return true
     }
 }
@@ -106,6 +119,7 @@ private class WindowPresenterSpy: WindowPresenter {
     enum Message: Equatable {
         case didStartEditing
         case didEndEditing
+        case didLoadPage(canGoBack: Bool, canGoForward: Bool)
     }
 
     var receivedMessages = [Message]()
@@ -116,5 +130,9 @@ private class WindowPresenterSpy: WindowPresenter {
 
     override func didEndEditing() {
         receivedMessages.append(.didEndEditing)
+    }
+
+    override func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
+        receivedMessages.append(.didLoadPage(canGoBack: canGoBack, canGoForward: canGoForward))
     }
 }
