@@ -29,7 +29,7 @@ public final class WindowViewAdapter: WindowViewContract {
     }
 }
 
-extension WindowViewAdapter: WebViewProxyProtocol {
+extension WindowViewAdapter: WebViewProxyDelegate {
     public func didLoadPage() {
         presenter.didLoadPage(canGoBack: webViewProxy.canGoBack(), canGoForward: webViewProxy.canGoForward())
     }

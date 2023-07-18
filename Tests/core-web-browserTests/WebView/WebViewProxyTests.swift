@@ -192,9 +192,9 @@ class WebViewProxyTests: XCTestCase {
         sut: WebViewProxy,
         webView: WebViewSpy,
         ruleStore: WKContentRuleListStoreSpy,
-        delegate: WebViewProxyProtocolSpy)
+        delegate: WebViewProxyDelegateSpy)
     {
-        let delegate = WebViewProxyProtocolSpy()
+        let delegate = WebViewProxyDelegateSpy()
         let webView = WebViewSpy()
         let ruleStore = WKContentRuleListStoreSpy()
         let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
@@ -285,7 +285,7 @@ class WebViewProxyTests: XCTestCase {
         }
     }
 
-    private class WebViewProxyProtocolSpy: WebViewProxyProtocol {
+    private class WebViewProxyDelegateSpy: WebViewProxyDelegate {
         enum Message: Equatable {
             case didLoadPage
             case didUpdateLoadingProgress(_: Double)
