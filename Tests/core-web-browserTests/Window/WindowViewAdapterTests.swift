@@ -21,6 +21,15 @@ class WindowViewAdapterTests: XCTestCase {
         XCTAssertEqual(webView.receivedMessages, [])
     }
 
+    func test_didEndTyping_sendsCorrectMessages() {
+        let (sut, webView, presenter) = makeSUT()
+
+        sut.didEndTyping()
+
+        XCTAssertEqual(presenter.receivedMessages, [.didEndEditing])
+        XCTAssertEqual(webView.receivedMessages, [])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: WindowViewAdapter, webView: WebViewSpy, presenter: WindowPresenterSpy) {
@@ -76,11 +85,16 @@ private class WebViewSpy: WebViewContract {
 private class WindowPresenterSpy: WindowPresenter {
     enum Message: Equatable {
         case didStartEditing
+        case didEndEditing
     }
 
     var receivedMessages = [Message]()
 
     override func didStartEditing() {
         receivedMessages.append(.didStartEditing)
+    }
+
+    override func didEndEditing() {
+        receivedMessages.append(.didEndEditing)
     }
 }
