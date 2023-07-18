@@ -1,12 +1,12 @@
 import WebKit
 
-public protocol WebViewProxyProtocol {
+public protocol WebViewProxyDelegate {
     func didLoadPage()
     func didUpdateLoadingProgress(_ progress: Double)
 }
 
-public final class WebViewProxy: NSObject {
-    public var delegate: WebViewProxyProtocol?
+public final class WebViewProxy: NSObject, WebViewContract {
+    public var delegate: WebViewProxyDelegate?
     let webView: WKWebView
     let ruleStore: WKContentRuleListStore
 

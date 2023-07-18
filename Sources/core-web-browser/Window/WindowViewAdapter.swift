@@ -1,15 +1,15 @@
 public final class WindowViewAdapter: WindowViewContract {
-    private let webViewProxy: WebViewProxy
+    private let webView: WebViewContract
     private let presenter: WindowPresenter
 
-    public init(webViewProxy: WebViewProxy, presenter: WindowPresenter) {
-        self.webViewProxy = webViewProxy
+    public init(webView: WebViewContract, presenter: WindowPresenter) {
+        self.webView = webView
         self.presenter = presenter
     }
 
     public func didRequestSearch(_ text: String) {
-        webViewProxy.showWebView()
-        webViewProxy.load(SearchURLBuilder.makeURL(from: text))
+        webView.showWebView()
+        webView.load(SearchURLBuilder.makeURL(from: text))
     }
 
     public func didStartTyping() {
@@ -21,17 +21,17 @@ public final class WindowViewAdapter: WindowViewContract {
     }
 
     public func didTapBackButton() {
-        webViewProxy.didTapBackButton()
+        webView.didTapBackButton()
     }
 
     public func didTapForwardButton() {
-        webViewProxy.didTapForwardButton()
+        webView.didTapForwardButton()
     }
 }
 
-extension WindowViewAdapter: WebViewProxyProtocol {
+extension WindowViewAdapter: WebViewProxyDelegate {
     public func didLoadPage() {
-        presenter.didLoadPage(canGoBack: webViewProxy.canGoBack(), canGoForward: webViewProxy.canGoForward())
+        presenter.didLoadPage(canGoBack: webView.canGoBack(), canGoForward: webView.canGoForward())
     }
 
     public func didUpdateLoadingProgress(_ progress: Double) {
