@@ -30,6 +30,15 @@ class WindowViewAdapterTests: XCTestCase {
         XCTAssertEqual(webView.receivedMessages, [])
     }
 
+    func test_didTapBackButton_sendsCorrectMessages() {
+        let (sut, webView, presenter) = makeSUT()
+
+        sut.didTapBackButton()
+
+        XCTAssertEqual(presenter.receivedMessages, [])
+        XCTAssertEqual(webView.receivedMessages, [.didTapBackButton])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: WindowViewAdapter, webView: WebViewSpy, presenter: WindowPresenterSpy) {
@@ -45,6 +54,7 @@ private class WebViewSpy: WebViewContract {
     enum Message: Equatable {
         case showWebView
         case load(url: URL)
+        case didTapBackButton
     }
 
     var receivedMessages = [Message]()
@@ -66,7 +76,7 @@ private class WebViewSpy: WebViewContract {
     }
 
     func didTapBackButton() {
-
+        receivedMessages.append(.didTapBackButton)
     }
 
     func didTapForwardButton() {
