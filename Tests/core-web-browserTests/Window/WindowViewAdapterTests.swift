@@ -4,24 +4,31 @@ import XCTest
 class WindowViewAdapterTests: XCTestCase {
 
     func test_didRequestSearch_sendsCorrectMessages() {
-        let webView = WebViewSpy()
-        let presenter = WindowPresenter()
-        let sut = WindowViewAdapter(webView: webView, presenter: presenter)
+        let (sut, webView, presenter) = makeSUT()
 
         sut.didRequestSearch("www.apple.com")
 
         XCTAssertEqual(webView.receivedMessages, [.showWebView, .load(url: URL(string: "http://www.apple.com")!)])
+        XCTAssertEqual(presenter.receivedMessages, [])
     }
 
     func test_didStartTyping_sendsCorrectMessages() {
-        let webView = WebViewSpy()
-        let presenter = WindowPresenterSpy()
-        let sut = WindowViewAdapter(webView: webView, presenter: presenter)
+        let (sut, webView, presenter) = makeSUT()
 
         sut.didStartTyping()
 
         XCTAssertEqual(presenter.receivedMessages, [.didStartEditing])
         XCTAssertEqual(webView.receivedMessages, [])
+    }
+
+    // MARK: - Helpers
+
+    private func makeSUT() -> (sut: WindowViewAdapter, webView: WebViewSpy, presenter: WindowPresenterSpy) {
+        let webView = WebViewSpy()
+        let presenter = WindowPresenterSpy()
+        let sut = WindowViewAdapter(webView: webView, presenter: presenter)
+
+        return (sut, webView, presenter)
     }
 }
 
