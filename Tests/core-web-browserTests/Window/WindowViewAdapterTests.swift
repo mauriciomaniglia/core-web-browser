@@ -57,6 +57,15 @@ class WindowViewAdapterTests: XCTestCase {
         XCTAssertEqual(presenter.receivedMessages, [.didLoadPage(canGoBack: true, canGoForward: true)])
     }
 
+    func test_didUpdateLoadingProgress_sendsCorrectMessages() {
+        let (sut, webView, presenter) = makeSUT()
+
+        sut.didUpdateLoadingProgress(0.5)
+
+        XCTAssertEqual(webView.receivedMessages, [])
+        XCTAssertEqual(presenter.receivedMessages, [.didUpdateProgressBar(value: 0.5)])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (sut: WindowViewAdapter, webView: WebViewSpy, presenter: WindowPresenterSpy) {
@@ -120,6 +129,7 @@ private class WindowPresenterSpy: WindowPresenter {
         case didStartEditing
         case didEndEditing
         case didLoadPage(canGoBack: Bool, canGoForward: Bool)
+        case didUpdateProgressBar(value: Double)
     }
 
     var receivedMessages = [Message]()
@@ -134,5 +144,9 @@ private class WindowPresenterSpy: WindowPresenter {
 
     override func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
         receivedMessages.append(.didLoadPage(canGoBack: canGoBack, canGoForward: canGoForward))
+    }
+
+    override func didUpdateProgressBar(_ value: Double) {
+        receivedMessages.append(.didUpdateProgressBar(value: value))
     }
 }
