@@ -1,4 +1,4 @@
-public enum WebViewRule: String {
+public enum BlockingRule: String {
     case advertising
     case analytics
     case social

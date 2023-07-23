@@ -137,7 +137,7 @@ class WebViewProxyTests: XCTestCase {
 
     func test_registerRules_whenRulesAreAlreadyRegisteredDoNotRegisterAgain() {
         let (sut, _, ruleStore, _) = makeSUT()
-        ruleStore.compileContentRuleList(forIdentifier: WebViewRule.advertising.rawValue, encodedContentRuleList: "[]", completionHandler: {_, _ in })
+        ruleStore.compileContentRuleList(forIdentifier: BlockingRule.advertising.rawValue, encodedContentRuleList: "[]", completionHandler: {_, _ in })
         ruleStore.receivedMessages = []
 
         sut.registerRules([.advertising])

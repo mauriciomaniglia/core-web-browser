@@ -13,11 +13,11 @@ class WebViewSpy: WebViewContract {
 
     var receivedMessages = [Message]()
 
-    func registerRules(_ rules: [WebViewRule]) {
+    func registerRules(_ rules: [BlockingRule]) {
 
     }
 
-    func applyRules(_ rules: [WebViewRule]) {
+    func applyRules(_ rules: [BlockingRule]) {
 
     }
 
