@@ -17,7 +17,7 @@ class WebViewSpy: WebViewContract {
 
     }
 
-    func applyRules(_ rules: [BlockingRule]) {
+    func applyRule(name: String) {
 
     }
 

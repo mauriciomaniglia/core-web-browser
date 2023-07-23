@@ -146,7 +146,7 @@ class WebViewProxyTests: XCTestCase {
                                                     .compileContentRuleList(identifier: "advertising")])
     }
 
-    func test_applyRules_whenRuleAreNotRegisterDoNotApplyRule() {
+    func test_applyRule_whenRuleIsNotRegisterDoNotApplyRule() {
         let contentController = WKUserContentControllerSpy()
         let configuration = WKWebViewConfigurationDummy()
         configuration.userContentController = contentController
@@ -154,14 +154,14 @@ class WebViewProxyTests: XCTestCase {
         let ruleStore = WKContentRuleListStoreSpy()
         let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
 
-        sut.applyRules([.advertising])
+        sut.applyRule(name: "advertising")
         ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
         XCTAssertEqual(contentController.reveivedMessages, [])
     }
 
-    func test_applyRules_whenRuleAreRegisterApplyRuleToWebView() {
+    func test_applyRule_whenRuleIsRegisterApplyRuleToWebView() {
         let contentController = WKUserContentControllerSpy()
         let configuration = WKWebViewConfigurationDummy()
         configuration.userContentController = contentController
@@ -169,7 +169,7 @@ class WebViewProxyTests: XCTestCase {
         let ruleStore = WKContentRuleListStoreSpy()
         let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
 
-        sut.applyRules([.advertising])
+        sut.applyRule(name: "advertising")
         ruleStore.simulateLookUpContentRuleListWithRegisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])

@@ -25,14 +25,12 @@ public final class WebViewProxy: NSObject, WebViewContract {
         })
     }
 
-    public func applyRules(_ rules: [BlockingRule]) {
-        for rule in rules {
-            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: { ruleList, _ in
-                guard let ruleList = ruleList else { return }
+    public func applyRule(name: String) {
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+            guard let ruleList = ruleList else { return }
 
-                self.webView.configuration.userContentController.add(ruleList)
-            })
-        }
+            self.webView.configuration.userContentController.add(ruleList)
+        })
     }
 
     public func showWebView() {
