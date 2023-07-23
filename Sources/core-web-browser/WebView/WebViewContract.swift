@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol WebViewContract {
-    func registerRules(_ rules: [BlockingRule])
+    func registerRule(name: String, content: String)
     func applyRules(_ rules: [BlockingRule])
     func showWebView()
     func load(_ url: URL)

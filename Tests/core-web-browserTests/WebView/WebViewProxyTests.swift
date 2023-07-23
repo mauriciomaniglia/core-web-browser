@@ -117,39 +117,29 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(delegate.receivedMessages, [.didUpdateLoadingProgress(0)])
     }
 
-    func test_registerRules_whenRulesAreEmptyDoNotSendAnyMessage() {
+    func test_registerRule_checkIfRuleExist() {
         let (sut, _, ruleStore, _) = makeSUT()
 
-        sut.registerRules([])
+        sut.registerRule(name: "advertising", content: "any")
 
-        XCTAssertEqual(ruleStore.receivedMessages, [])
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
     }
 
-    func test_registerRules_whenThereAreRulesCheckIfTheyAreRegistered() {
+    func test_registerRule_whenRuleIsAlreadyRegisteredDoNotRegisterAgain() {
         let (sut, _, ruleStore, _) = makeSUT()
-
-        sut.registerRules([.advertising, .analytics, .social])
-
-        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),
-                                                    .lookUpContentRuleList(identifier: "analytics"),
-                                                    .lookUpContentRuleList(identifier: "social")])
-    }
-
-    func test_registerRules_whenRulesAreAlreadyRegisteredDoNotRegisterAgain() {
-        let (sut, _, ruleStore, _) = makeSUT()
-        ruleStore.compileContentRuleList(forIdentifier: BlockingRule.advertising.rawValue, encodedContentRuleList: "[]", completionHandler: {_, _ in })
+        ruleStore.compileContentRuleList(forIdentifier: "advertising", encodedContentRuleList: "[]", completionHandler: {_, _ in })
         ruleStore.receivedMessages = []
 
-        sut.registerRules([.advertising])
+        sut.registerRule(name: "advertising", content: "any")
         ruleStore.simulateLookUpContentRuleListWithRegisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
     }
 
-    func test_registerRules_whenRuleIsNotRegisteredThenRequestRegistration() {
+    func test_registerRule_whenRuleIsNotRegisteredThenRequestRegistration() {
         let (sut, _, ruleStore, _) = makeSUT()
 
-        sut.registerRules([.advertising])
+        sut.registerRule(name: "advertising", content: "any")
         ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),

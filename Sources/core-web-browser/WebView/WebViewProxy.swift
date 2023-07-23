@@ -17,14 +17,12 @@ public final class WebViewProxy: NSObject, WebViewContract {
         registerObserversForWebView()
     }
 
-    public func registerRules(_ rules: [BlockingRule]) {
-        for rule in rules {
-            ruleStore.lookUpContentRuleList(forIdentifier: rule.rawValue, completionHandler: { ruleList, _ in
-                if ruleList != nil { return }
+    public func registerRule(name: String, content: String) {
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+            if ruleList != nil { return }
 
-                self.ruleStore.compileContentRuleList(forIdentifier: rule.rawValue, encodedContentRuleList: rule.content(), completionHandler: {_, _ in })
-            })
-        }
+            self.ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: content, completionHandler: {_, _ in })
+        })
     }
 
     public func applyRules(_ rules: [BlockingRule]) {
