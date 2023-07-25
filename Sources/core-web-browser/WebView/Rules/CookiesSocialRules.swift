@@ -1,5 +1,4 @@
-extension BlockingRuleContent {
-    static var cookiesSocial: String {
+let cookiesSocialRules =
         """
         [
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?address\\.yahoo\\.com","load-type":["third-party"],"unless-domain":["*5min.com","*adap.tv","*adtech.com","*adtech.de","*adtechus.com","*advertising.com","*aim.com","*aol.com","*aolcdn.com","*aoltechguru.com","*atwola.com","*autoblog.com","*cambio.com","*dailyfinance.com","*editions.com","*engadget.com","*flickr.com","*flurry.com","*games.com","*homesessive.com","*huffingtonpost.com","*makers.com","*mapquest.com","*moviefone.com","*noisecreep.com","*patch.com","*pawnation.com","*shortcuts.com","*shoutcast.com","*spinner.com","*stylelist.com","*stylemepretty.com","*surphace.com","*techcrunch.com","*theboombox.com","*theboot.com","*tumblr.com","*userplane.com","*winamp.com","*yahoo.co.jp","*yahoo.com","*yahoosmallbusiness.com","*yahoostudios.com","*yuilibrary.com"]}},
@@ -68,5 +67,3 @@ extension BlockingRuleContent {
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ymail\\.com","load-type":["third-party"],"unless-domain":["*5min.com","*adap.tv","*adtech.com","*adtech.de","*adtechus.com","*advertising.com","*aim.com","*aol.com","*aolcdn.com","*aoltechguru.com","*atwola.com","*autoblog.com","*cambio.com","*dailyfinance.com","*editions.com","*engadget.com","*flickr.com","*flurry.com","*games.com","*homesessive.com","*huffingtonpost.com","*makers.com","*mapquest.com","*moviefone.com","*noisecreep.com","*patch.com","*pawnation.com","*shortcuts.com","*shoutcast.com","*spinner.com","*stylelist.com","*stylemepretty.com","*surphace.com","*techcrunch.com","*theboombox.com","*theboot.com","*tumblr.com","*userplane.com","*winamp.com","*yahoo.co.jp","*yahoo.com","*yahoosmallbusiness.com","*yahoostudios.com","*yuilibrary.com"]}}
         ]
         """
-    }
-}

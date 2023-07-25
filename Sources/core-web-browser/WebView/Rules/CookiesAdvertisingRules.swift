@@ -1,5 +1,4 @@
-extension BlockingRuleContent {
-    static var cookiesAdvertising: String {
+let cookiesAdvertisingRules =
         """
         [
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?00px\\.net","load-type":["third-party"],"unless-domain":["*adx.space"]}},
@@ -1753,5 +1752,3 @@ extension BlockingRuleContent {
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zypmedia\\.com","load-type":["third-party"],"unless-domain":["*zypmedia.com"]}}
         ]
         """
-    }
-}

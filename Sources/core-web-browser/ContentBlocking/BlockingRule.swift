@@ -11,21 +11,21 @@ public enum BlockingRule: String {
     func content() -> String {
         switch self {
         case .advertising:
-            return BlockingRuleContent.advertising
+            return advertisingRules
         case .analytics:
-            return BlockingRuleContent.analytics
+            return analyticsRules
         case .social:
-            return BlockingRuleContent.social
+            return socialRules
         case .cryptomining:
-            return BlockingRuleContent.cryptomining
+            return cryptominingRules
         case .fingerprinting:
-            return BlockingRuleContent.fingerprinting
+            return fingerprintingRules
         case .advertisingCookies:
-            return BlockingRuleContent.cookiesAdvertising
+            return cookiesAdvertisingRules
         case .analyticsCookies:
-            return BlockingRuleContent.cookiesAnalytics
+            return cookiesAnalyticsRules
         case .socialCookies:
-            return BlockingRuleContent.cookiesSocial
+            return cookiesSocialRules
         }
     }
 }

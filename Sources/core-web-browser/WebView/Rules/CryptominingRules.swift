@@ -1,5 +1,4 @@
-extension BlockingRuleContent {
-    static var cryptomining: String {
+let cryptominingRules =
         """
         [
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?1q2w3\\.website","load-type":["third-party"],"unless-domain":["*mineralt.io","*vidzi.nu","*vidzi.tv"]}},
@@ -73,5 +72,3 @@ extension BlockingRuleContent {
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zymerget\\.faith","load-type":["third-party"],"unless-domain":["*alflying.date","*alflying.win","*anybest.site","*flightsy.bid","*flightsy.win","*flightzy.bid","*flightzy.date","*flightzy.win","*zymerget.bid","*zymerget.faith"]}}
         ]
         """
-    }
-}

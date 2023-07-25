@@ -1,5 +1,4 @@
-extension BlockingRuleContent {
-    static var fingerprinting: String {
+let fingerprintingRules =
         """
         [
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?00px\\.net","load-type":["third-party"],"unless-domain":["*adx.space"]}},
@@ -115,5 +114,3 @@ extension BlockingRuleContent {
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ze-fir\\.com","load-type":["third-party"],"unless-domain":["*ze-fir.com"]}}
         ]
         """
-    }
-}

@@ -1,5 +1,4 @@
-extension BlockingRuleContent {
-    static var cookiesAnalytics: String {
+let cookiesAnalyticsRules =
         """
         [
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?3dstats\\.com","load-type":["third-party"],"unless-domain":["*3dstats.com","*addfreestats.com"]}},
@@ -322,5 +321,3 @@ extension BlockingRuleContent {
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zoominfo\\.com","load-type":["third-party"],"unless-domain":["*zoominfo.com"]}}
         ]
         """
-    }
-}
