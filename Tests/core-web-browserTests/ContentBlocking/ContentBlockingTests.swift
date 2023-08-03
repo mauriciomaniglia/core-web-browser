@@ -12,9 +12,18 @@ final class ContentBlocking {
 class ContentBlockingTests: XCTestCase {
 
     func test_init_doesNotSendAnyMessages() {
-        let webView = WebViewSpy()
-        _ = ContentBlocking(webView: webView)
+        let (_, webView) = makeSUT()
 
         XCTAssertEqual(webView.receivedMessages, [])
+    }
+
+
+    // MARK: - Helpers
+
+    private func makeSUT() -> (sut: ContentBlocking, webView: WebViewSpy) {
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView)
+
+        return (sut, webView)
     }
 }
