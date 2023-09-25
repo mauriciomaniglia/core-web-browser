@@ -40,6 +40,26 @@ final class ContentBlocking {
         webView.applyRule(name: cryptomining.name)
         webView.applyRule(name: fingerprinting.name)
     }
+
+    func setupStrictProtection() {
+        let advertising = rulesProvider.advertising()
+        let analytics = rulesProvider.analytics()
+        let social = rulesProvider.social()
+        let cryptomining = rulesProvider.cryptomining()
+        let fingerprinting = rulesProvider.fingerprinting()
+
+        webView.registerRule(name: advertising.name, content: advertising.content)
+        webView.registerRule(name: analytics.name, content: analytics.content)
+        webView.registerRule(name: social.name, content: social.content)
+        webView.registerRule(name: cryptomining.name, content: cryptomining.content)
+        webView.registerRule(name: fingerprinting.name, content: fingerprinting.content)
+
+        webView.applyRule(name: advertising.name)
+        webView.applyRule(name: analytics.name)
+        webView.applyRule(name: social.name)
+        webView.applyRule(name: cryptomining.name)
+        webView.applyRule(name: fingerprinting.name)
+    }
 }
 
 class ContentBlockingTests: XCTestCase {
@@ -73,6 +93,33 @@ class ContentBlockingTests: XCTestCase {
             .applyRule("advertisingCookies"),
             .applyRule("analyticsCookies"),
             .applyRule("socialCookies"),
+            .applyRule("cryptomining"),
+            .applyRule("fingerprinting")
+        ])
+    }
+
+    func test_setupStrictProtection_applyCorrectRules() {
+        let (sut, webView, rulesProvider) = makeSUT()
+
+        sut.setupStrictProtection()
+
+        XCTAssertEqual(rulesProvider.receivedMessages, [
+            .advertising,
+            .analytics,
+            .social,
+            .cryptomining,
+            .fingerprinting
+        ])
+        XCTAssertEqual(webView.receivedMessages, [
+            .registerRule("advertising", "advertising content"),
+            .registerRule("analytics", "analytics content"),
+            .registerRule("social", "social content"),
+            .registerRule("cryptomining", "cryptomining content"),
+            .registerRule("fingerprinting", "fingerprinting content"),
+
+            .applyRule("advertising"),
+            .applyRule("analytics"),
+            .applyRule("social"),
             .applyRule("cryptomining"),
             .applyRule("fingerprinting")
         ])
