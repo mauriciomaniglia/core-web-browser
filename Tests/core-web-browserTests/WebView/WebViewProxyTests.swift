@@ -158,7 +158,7 @@ class WebViewProxyTests: XCTestCase {
         ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
-        XCTAssertEqual(contentController.reveivedMessages, [])
+        XCTAssertEqual(contentController.receivedMessages, [])
     }
 
     func test_applyRule_whenRuleIsRegisterApplyRuleToWebView() {
@@ -173,7 +173,7 @@ class WebViewProxyTests: XCTestCase {
         ruleStore.simulateLookUpContentRuleListWithRegisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising")])
-        XCTAssertEqual(contentController.reveivedMessages, [.add])
+        XCTAssertEqual(contentController.receivedMessages, [.add])
     }
 
     func test_removeAllRules_removesAllRegisteredRules() {
@@ -186,7 +186,7 @@ class WebViewProxyTests: XCTestCase {
 
         sut.removeAllRules()
 
-        XCTAssertEqual(contentController.reveivedMessages, [.removeAllContentRuleLists])
+        XCTAssertEqual(contentController.receivedMessages, [.removeAllContentRuleLists])
     }
 
     // MARK: - Helpers
@@ -214,14 +214,14 @@ class WebViewProxyTests: XCTestCase {
             case removeAllContentRuleLists
         }
 
-        var reveivedMessages: [Message] = []
+        var receivedMessages: [Message] = []
 
         override func add(_ contentRuleList: WKContentRuleList) {
-            reveivedMessages.append(.add)
+            receivedMessages.append(.add)
         }
 
         override func removeAllContentRuleLists() {
-            reveivedMessages.append(.removeAllContentRuleLists)
+            receivedMessages.append(.removeAllContentRuleLists)
         }
     }
 
