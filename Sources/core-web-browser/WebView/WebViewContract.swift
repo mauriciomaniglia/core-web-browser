@@ -3,6 +3,7 @@ import Foundation
 public protocol WebViewContract {
     func registerRule(name: String, content: String)
     func applyRule(name: String)
+    func removeAllRules()
     func showWebView()
     func load(_ url: URL)
     func didTapBackButton()

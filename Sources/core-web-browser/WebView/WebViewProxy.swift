@@ -33,6 +33,10 @@ public final class WebViewProxy: NSObject, WebViewContract {
         })
     }
 
+    public func removeAllRules() {
+        self.webView.configuration.userContentController.removeAllContentRuleLists()
+    }
+
     public func showWebView() {
         webView.isHidden = false
     }

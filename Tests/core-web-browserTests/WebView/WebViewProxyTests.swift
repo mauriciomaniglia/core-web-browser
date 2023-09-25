@@ -176,6 +176,19 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(contentController.reveivedMessages, [.add])
     }
 
+    func test_removeAllRules_removesAllRegisteredRules() {
+        let contentController = WKUserContentControllerSpy()
+        let configuration = WKWebViewConfigurationDummy()
+        configuration.userContentController = contentController
+        let webView = WebViewSpy(frame: .zero, configuration: configuration)
+        let ruleStore = WKContentRuleListStoreSpy()
+        let sut = WebViewProxy(webView: webView, ruleStore: ruleStore)
+
+        sut.removeAllRules()
+
+        XCTAssertEqual(contentController.reveivedMessages, [.removeAllContentRuleLists])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT() -> (
@@ -198,12 +211,17 @@ class WebViewProxyTests: XCTestCase {
     private class WKUserContentControllerSpy: WKUserContentController {
         enum Message {
             case add
+            case removeAllContentRuleLists
         }
 
         var reveivedMessages: [Message] = []
 
         override func add(_ contentRuleList: WKContentRuleList) {
             reveivedMessages.append(.add)
+        }
+
+        override func removeAllContentRuleLists() {
+            reveivedMessages.append(.removeAllContentRuleLists)
         }
     }
 

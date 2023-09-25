@@ -5,6 +5,7 @@ class WebViewSpy: WebViewContract {
     enum Message: Equatable {
         case registerRule(_ name: String, _ content: String)
         case applyRule(_ name: String)
+        case removeAllRules
         case showWebView
         case load(url: URL)
         case didTapBackButton
@@ -21,6 +22,10 @@ class WebViewSpy: WebViewContract {
 
     func applyRule(name: String) {
         receivedMessages.append(.applyRule(name))
+    }
+
+    func removeAllRules() {
+        receivedMessages.append(.removeAllRules)
     }
 
     func showWebView() {
