@@ -60,6 +60,10 @@ final class ContentBlocking {
         webView.applyRule(name: cryptomining.name)
         webView.applyRule(name: fingerprinting.name)
     }
+
+    func removeProtection() {
+        webView.removeAllRules()
+    }
 }
 
 class ContentBlockingTests: XCTestCase {
@@ -123,6 +127,14 @@ class ContentBlockingTests: XCTestCase {
             .applyRule("cryptomining"),
             .applyRule("fingerprinting")
         ])
+    }
+
+    func test_removeProtection_removeAllRules() {
+        let (sut, webView, _) = makeSUT()
+
+        sut.removeProtection()
+
+        XCTAssertEqual(webView.receivedMessages, [.removeAllRules])
     }
 
 
