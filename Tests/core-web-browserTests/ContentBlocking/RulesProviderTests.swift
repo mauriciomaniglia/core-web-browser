@@ -1,38 +1,5 @@
 import XCTest
-
-class RulesProvider {
-    func advertising() -> (name: String, content: String) {
-        return ("advertising", "")
-    }
-
-    func analytics() -> (name: String, content: String) {
-        return ("analytics", "")
-    }
-
-    func social() -> (name: String, content: String) {
-        return ("social", "")
-    }
-
-    func cryptomining() -> (name: String, content: String) {
-        return ("cryptomining", "")
-    }
-
-    func fingerprinting() -> (name: String, content: String) {
-        return ("fingerprinting", "")
-    }
-
-    func advertisingCookies() -> (name: String, content: String) {
-        return ("advertisingCookies", "")
-    }
-
-    func analyticsCookies() -> (name: String, content: String) {
-        return ("analyticsCookies", "")
-    }
-
-    func socialCookies() -> (name: String, content: String) {
-        return ("socialCookies", "")
-    }
-}
+import core_web_browser
 
 class RulesProviderTests: XCTestCase {
     
