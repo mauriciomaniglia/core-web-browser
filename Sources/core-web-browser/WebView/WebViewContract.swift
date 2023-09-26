@@ -1,8 +1,9 @@
 import Foundation
 
 public protocol WebViewContract {
-    func registerRules(_ rules: [WebViewRule])
-    func applyRules(_ rules: [WebViewRule])
+    func registerRule(name: String, content: String)
+    func applyRule(name: String)
+    func removeAllRules()
     func showWebView()
     func load(_ url: URL)
     func didTapBackButton()
