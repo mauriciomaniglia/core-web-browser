@@ -1,4 +1,4 @@
-public class RulesProvider {
+public class RulesProvider: RulesProviderContract {
     public init() {}
 
     public func advertising() -> (name: String, content: String) {
