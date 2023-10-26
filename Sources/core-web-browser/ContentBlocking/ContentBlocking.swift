@@ -1,53 +1,45 @@
+import Foundation
+
 final public class ContentBlocking {
     private let webView: WebViewContract
-    private let rulesProvider: RulesProviderContract
+    private let jsonLoader: (String) -> String?
 
-    public init(webView: WebViewContract, rulesProvider: RulesProviderContract) {
+    public init(webView: WebViewContract, jsonLoader: @escaping (String) -> String? = ContentBlocking.loadJsonContent(filename:)) {
         self.webView = webView
-        self.rulesProvider = rulesProvider
+        self.jsonLoader = jsonLoader
     }
 
     public func setupBasicProtection() {
-        let advertisingCookies = rulesProvider.advertisingCookies()
-        let analyticsCookies = rulesProvider.analyticsCookies()
-        let socialCookies = rulesProvider.socialCookies()
-        let cryptomining = rulesProvider.cryptomining()
-        let fingerprinting = rulesProvider.fingerprinting()
-
-        webView.registerRule(name: advertisingCookies.name, content: advertisingCookies.content)
-        webView.registerRule(name: analyticsCookies.name, content: analyticsCookies.content)
-        webView.registerRule(name: socialCookies.name, content: socialCookies.content)
-        webView.registerRule(name: cryptomining.name, content: cryptomining.content)
-        webView.registerRule(name: fingerprinting.name, content: fingerprinting.content)
-
-        webView.applyRule(name: advertisingCookies.name)
-        webView.applyRule(name: analyticsCookies.name)
-        webView.applyRule(name: socialCookies.name)
-        webView.applyRule(name: cryptomining.name)
-        webView.applyRule(name: fingerprinting.name)
+        let rules = ["CookiesAdvertisingRules", "CookiesAnalyticsRules", "CookiesSocialRules", "CryptominingRules", "FingerprintingRules"]
+        registerAndApplyRules(rules)
     }
 
     public func setupStrictProtection() {
-        let advertising = rulesProvider.advertising()
-        let analytics = rulesProvider.analytics()
-        let social = rulesProvider.social()
-        let cryptomining = rulesProvider.cryptomining()
-        let fingerprinting = rulesProvider.fingerprinting()
-
-        webView.registerRule(name: advertising.name, content: advertising.content)
-        webView.registerRule(name: analytics.name, content: analytics.content)
-        webView.registerRule(name: social.name, content: social.content)
-        webView.registerRule(name: cryptomining.name, content: cryptomining.content)
-        webView.registerRule(name: fingerprinting.name, content: fingerprinting.content)
-
-        webView.applyRule(name: advertising.name)
-        webView.applyRule(name: analytics.name)
-        webView.applyRule(name: social.name)
-        webView.applyRule(name: cryptomining.name)
-        webView.applyRule(name: fingerprinting.name)
+        let rules = ["AdvertisingRules", "AnalyticsRules", "SocialRules", "CryptominingRules", "FingerprintingRules"]
+        registerAndApplyRules(rules)
     }
 
     public func removeProtection() {
         webView.removeAllRules()
+    }
+
+    private func registerAndApplyRules(_ rules: [String]) {
+        for rule in rules {
+            if let content = jsonLoader(rule) {
+                webView.registerRule(name: rule, content: content)
+                webView.applyRule(name: rule)
+            }
+        }
+    }
+
+    public static func loadJsonContent(filename: String) -> String? {
+        guard let url = Bundle.module.url(forResource: filename, withExtension: "json") else { return nil }
+
+        do {
+            let data = try Data(contentsOf: url)
+            return String(data: data, encoding: .utf8)
+        } catch {
+            return nil
+        }
     }
 }

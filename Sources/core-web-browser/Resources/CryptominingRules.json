@@ -1,5 +1,3 @@
-let cryptominingRules =
-        """
         [
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?1q2w3\\.website","load-type":["third-party"],"unless-domain":["*mineralt.io","*vidzi.nu","*vidzi.tv"]}},
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ad-miner\\.com","load-type":["third-party"],"unless-domain":["*authedmine.com","*coinhive.com"]}},
@@ -71,4 +69,3 @@ let cryptominingRules =
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zymerget\\.bid","load-type":["third-party"],"unless-domain":["*alflying.date","*alflying.win","*anybest.site","*flightsy.bid","*flightsy.win","*flightzy.bid","*flightzy.date","*flightzy.win","*zymerget.bid","*zymerget.faith"]}},
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zymerget\\.faith","load-type":["third-party"],"unless-domain":["*alflying.date","*alflying.win","*anybest.site","*flightsy.bid","*flightsy.win","*flightzy.bid","*flightzy.date","*flightzy.win","*zymerget.bid","*zymerget.faith"]}}
         ]
-        """

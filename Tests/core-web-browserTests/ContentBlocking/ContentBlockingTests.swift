@@ -4,68 +4,53 @@ import core_web_browser
 class ContentBlockingTests: XCTestCase {
 
     func test_init_doesNotSendAnyMessages() {
-        let (_, webView, rulesProvider) = makeSUT()
+        let (_, webView) = makeSUT()
 
         XCTAssertEqual(webView.receivedMessages, [])
-        XCTAssertEqual(rulesProvider.receivedMessages, [])
     }
 
     func test_setupBasicProtection_applyCorrectRules() {
-        let (sut, webView, rulesProvider) = makeSUT()
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
 
         sut.setupBasicProtection()
 
-        XCTAssertEqual(rulesProvider.receivedMessages, [
-            .advertisingCookies,
-            .analyticsCookies,
-            .socialCookies,
-            .cryptomining,
-            .fingerprinting
-        ])
         XCTAssertEqual(webView.receivedMessages, [
-            .registerRule("advertisingCookies", "advertisingCookies content"),
-            .registerRule("analyticsCookies", "analyticsCookies content"),
-            .registerRule("socialCookies", "socialCookies content"),
-            .registerRule("cryptomining", "cryptomining content"),
-            .registerRule("fingerprinting", "fingerprinting content"),
-
-            .applyRule("advertisingCookies"),
-            .applyRule("analyticsCookies"),
-            .applyRule("socialCookies"),
-            .applyRule("cryptomining"),
-            .applyRule("fingerprinting")
+            .registerRule("CookiesAdvertisingRules", "json content"),
+            .applyRule("CookiesAdvertisingRules"),
+            .registerRule("CookiesAnalyticsRules", "json content"),
+            .applyRule("CookiesAnalyticsRules"),
+            .registerRule("CookiesSocialRules", "json content"),
+            .applyRule("CookiesSocialRules"),
+            .registerRule("CryptominingRules", "json content"),
+            .applyRule("CryptominingRules"),
+            .registerRule("FingerprintingRules", "json content"),
+            .applyRule("FingerprintingRules")
         ])
     }
 
     func test_setupStrictProtection_applyCorrectRules() {
-        let (sut, webView, rulesProvider) = makeSUT()
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
 
         sut.setupStrictProtection()
 
-        XCTAssertEqual(rulesProvider.receivedMessages, [
-            .advertising,
-            .analytics,
-            .social,
-            .cryptomining,
-            .fingerprinting
-        ])
         XCTAssertEqual(webView.receivedMessages, [
-            .registerRule("advertising", "advertising content"),
-            .registerRule("analytics", "analytics content"),
-            .registerRule("social", "social content"),
-            .registerRule("cryptomining", "cryptomining content"),
-            .registerRule("fingerprinting", "fingerprinting content"),
-
-            .applyRule("advertising"),
-            .applyRule("analytics"),
-            .applyRule("social"),
-            .applyRule("cryptomining"),
-            .applyRule("fingerprinting")
+            .registerRule("AdvertisingRules", "json content"),
+            .applyRule("AdvertisingRules"),
+            .registerRule("AnalyticsRules", "json content"),
+            .applyRule("AnalyticsRules"),
+            .registerRule("SocialRules", "json content"),
+            .applyRule("SocialRules"),
+            .registerRule("CryptominingRules", "json content"),
+            .applyRule("CryptominingRules"),
+            .registerRule("FingerprintingRules", "json content"),
+            .applyRule("FingerprintingRules")
         ])
     }
 
     func test_removeProtection_removeAllRules() {
-        let (sut, webView, _) = makeSUT()
+        let (sut, webView) = makeSUT()
 
         sut.removeProtection()
 
@@ -75,11 +60,10 @@ class ContentBlockingTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT() -> (sut: ContentBlocking, webView: WebViewSpy, rulesProvider: RulesProviderSpy) {
+    private func makeSUT() -> (sut: ContentBlocking, webView: WebViewSpy) {
         let webView = WebViewSpy()
-        let rulesProvider = RulesProviderSpy()
-        let sut = ContentBlocking(webView: webView, rulesProvider: rulesProvider)
+        let sut = ContentBlocking(webView: webView)
 
-        return (sut, webView, rulesProvider)
+        return (sut, webView)
     }
 }
