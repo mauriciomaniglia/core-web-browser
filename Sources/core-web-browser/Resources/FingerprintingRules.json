@@ -1,5 +1,3 @@
-let fingerprintingRules =
-        """
         [
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?00px\\.net","load-type":["third-party"],"unless-domain":["*adx.space"]}},
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?2mdnsys\\.com","load-type":["third-party"],"unless-domain":["*2mdnsys.com"]}},
@@ -113,4 +111,3 @@ let fingerprintingRules =
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zaful\\.com","load-type":["third-party"],"unless-domain":["*zaful.com"]}},
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ze-fir\\.com","load-type":["third-party"],"unless-domain":["*ze-fir.com"]}}
         ]
-        """

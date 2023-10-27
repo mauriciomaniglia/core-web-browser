@@ -1,5 +1,3 @@
-let cookiesAnalyticsRules =
-        """
         [
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?3dstats\\.com","load-type":["third-party"],"unless-domain":["*3dstats.com","*addfreestats.com"]}},
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?4u\\.pl","load-type":["third-party"],"unless-domain":["*4u.pl"]}},
@@ -320,4 +318,3 @@ let cookiesAnalyticsRules =
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zendesk\\.com","load-type":["third-party"],"unless-domain":["*zendesk.com"]}},
         {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zoominfo\\.com","load-type":["third-party"],"unless-domain":["*zoominfo.com"]}}
         ]
-        """

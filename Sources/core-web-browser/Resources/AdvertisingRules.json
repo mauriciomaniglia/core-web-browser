@@ -1,5 +1,3 @@
-let advertisingRules =
-    """
     [
     {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?00px\\.net","load-type":["third-party"],"unless-domain":["*adx.space"]}},
     {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?103092804\\.com","load-type":["third-party"],"unless-domain":["*103092804.com","*kitaramedia.com"]}},
@@ -1751,4 +1749,3 @@ let advertisingRules =
     {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zumobi\\.com","load-type":["third-party"],"unless-domain":["*zumobi.com"]}},
     {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?zypmedia\\.com","load-type":["third-party"],"unless-domain":["*zypmedia.com"]}}
     ]
-    """
