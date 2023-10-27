@@ -1,10 +1,8 @@
-import Foundation
-
 final public class ContentBlocking {
     private let webView: WebViewContract
     private let jsonLoader: (String) -> String?
 
-    public init(webView: WebViewContract, jsonLoader: @escaping (String) -> String? = ContentBlocking.loadJsonContent(filename:)) {
+    public init(webView: WebViewContract, jsonLoader: @escaping (String) -> String? = Helpers.loadJsonContent(filename:)) {
         self.webView = webView
         self.jsonLoader = jsonLoader
     }
@@ -29,17 +27,6 @@ final public class ContentBlocking {
                 webView.registerRule(name: rule, content: content)
                 webView.applyRule(name: rule)
             }
-        }
-    }
-
-    public static func loadJsonContent(filename: String) -> String? {
-        guard let url = Bundle.module.url(forResource: filename, withExtension: "json") else { return nil }
-
-        do {
-            let data = try Data(contentsOf: url)
-            return String(data: data, encoding: .utf8)
-        } catch {
-            return nil
         }
     }
 }
