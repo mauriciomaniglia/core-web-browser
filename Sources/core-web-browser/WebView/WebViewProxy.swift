@@ -17,7 +17,7 @@ public final class WebViewProxy: NSObject, WebViewContract {
         registerObserversForWebView()
     }
 
-    public func registerRule(name: String, content: String) {
+    public func registerRule(name: String, content: String, whitelist: [String] = []) {
         ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
             if ruleList != nil { return }
 

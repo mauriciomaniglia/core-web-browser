@@ -7,24 +7,24 @@ final public class ContentBlocking {
         self.jsonLoader = jsonLoader
     }
 
-    public func setupBasicProtection() {
+    public func setupBasicProtection(whitelist: [String] = []) {
         let rules = ["CookiesAdvertisingRules", "CookiesAnalyticsRules", "CookiesSocialRules", "CryptominingRules", "FingerprintingRules"]
-        registerAndApplyRules(rules)
+        registerAndApplyRules(rules: rules, whitelist: whitelist)
     }
 
     public func setupStrictProtection() {
         let rules = ["AdvertisingRules", "AnalyticsRules", "SocialRules", "CryptominingRules", "FingerprintingRules"]
-        registerAndApplyRules(rules)
+        registerAndApplyRules(rules: rules, whitelist: [])
     }
 
     public func removeProtection() {
         webView.removeAllRules()
     }
 
-    private func registerAndApplyRules(_ rules: [String]) {
+    private func registerAndApplyRules(rules: [String], whitelist: [String]) {
         for rule in rules {
             if let content = jsonLoader(rule) {
-                webView.registerRule(name: rule, content: content)
+                webView.registerRule(name: rule, content: content, whitelist: whitelist)
                 webView.applyRule(name: rule)
             }
         }
