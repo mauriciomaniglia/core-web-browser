@@ -69,6 +69,26 @@ class ContentBlockingTests: XCTestCase {
         ])
     }
 
+    func test_setupStrictProtection_whenWhitelistAreAvailableApplyCorrectRules() {
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
+
+        sut.setupStrictProtection(whitelist: ["www.apple.com", "www.google.com"])
+
+        XCTAssertEqual(webView.receivedMessages, [
+            .registerRule("AdvertisingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .applyRule("AdvertisingRules"),
+            .registerRule("AnalyticsRules", "json content", ["www.apple.com", "www.google.com"]),
+            .applyRule("AnalyticsRules"),
+            .registerRule("SocialRules", "json content", ["www.apple.com", "www.google.com"]),
+            .applyRule("SocialRules"),
+            .registerRule("CryptominingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .applyRule("CryptominingRules"),
+            .registerRule("FingerprintingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .applyRule("FingerprintingRules")
+        ])
+    }
+
     func test_removeProtection_removeAllRules() {
         let (sut, webView) = makeSUT()
 

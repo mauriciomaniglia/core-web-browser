@@ -12,9 +12,9 @@ final public class ContentBlocking {
         registerAndApplyRules(rules: rules, whitelist: whitelist)
     }
 
-    public func setupStrictProtection() {
+    public func setupStrictProtection(whitelist: [String] = []) {
         let rules = ["AdvertisingRules", "AnalyticsRules", "SocialRules", "CryptominingRules", "FingerprintingRules"]
-        registerAndApplyRules(rules: rules, whitelist: [])
+        registerAndApplyRules(rules: rules, whitelist: whitelist)
     }
 
     public func removeProtection() {
