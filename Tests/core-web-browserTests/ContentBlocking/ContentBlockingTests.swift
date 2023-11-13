@@ -32,19 +32,20 @@ class ContentBlockingTests: XCTestCase {
     func test_setupBasicProtection_whenWhitelistAreAvailableApplyCorrectRules() {
         let webView = WebViewSpy()
         let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
+        let whitelist = ["www.apple.com", "www.google.com"]
 
-        sut.setupBasicProtection(whitelist: ["www.apple.com", "www.google.com"])
+        sut.setupBasicProtection(whitelist: whitelist)
 
         XCTAssertEqual(webView.receivedMessages, [
-            .registerRule("CookiesAdvertisingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("CookiesAdvertisingRules", "json content", whitelist),
             .applyRule("CookiesAdvertisingRules"),
-            .registerRule("CookiesAnalyticsRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("CookiesAnalyticsRules", "json content", whitelist),
             .applyRule("CookiesAnalyticsRules"),
-            .registerRule("CookiesSocialRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("CookiesSocialRules", "json content", whitelist),
             .applyRule("CookiesSocialRules"),
-            .registerRule("CryptominingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("CryptominingRules", "json content", whitelist),
             .applyRule("CryptominingRules"),
-            .registerRule("FingerprintingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("FingerprintingRules", "json content", whitelist),
             .applyRule("FingerprintingRules")
         ])
     }
@@ -72,19 +73,20 @@ class ContentBlockingTests: XCTestCase {
     func test_setupStrictProtection_whenWhitelistAreAvailableApplyCorrectRules() {
         let webView = WebViewSpy()
         let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
+        let whitelist = ["www.apple.com", "www.google.com"]
 
-        sut.setupStrictProtection(whitelist: ["www.apple.com", "www.google.com"])
+        sut.setupStrictProtection(whitelist: whitelist)
 
         XCTAssertEqual(webView.receivedMessages, [
-            .registerRule("AdvertisingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("AdvertisingRules", "json content", whitelist),
             .applyRule("AdvertisingRules"),
-            .registerRule("AnalyticsRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("AnalyticsRules", "json content", whitelist),
             .applyRule("AnalyticsRules"),
-            .registerRule("SocialRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("SocialRules", "json content", whitelist),
             .applyRule("SocialRules"),
-            .registerRule("CryptominingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("CryptominingRules", "json content", whitelist),
             .applyRule("CryptominingRules"),
-            .registerRule("FingerprintingRules", "json content", ["www.apple.com", "www.google.com"]),
+            .registerRule("FingerprintingRules", "json content", whitelist),
             .applyRule("FingerprintingRules")
         ])
     }
