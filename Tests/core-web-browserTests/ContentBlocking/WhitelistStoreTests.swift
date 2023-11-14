@@ -69,4 +69,16 @@ class WhitelistStoreTests: XCTestCase {
 
         XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
     }
+
+    func test_removeDomain_whenListContainsOtherDomainsRemoveTheCorrectDomain() {
+        WhitelistStore.saveDomain("www.apple.com")
+        WhitelistStore.saveDomain("www.google.com")
+        WhitelistStore.saveDomain("www.youtube.com")
+
+        WhitelistStore.removeDomain("www.apple.com")
+
+        XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
+        XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.google.com"))
+        XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.youtube.com"))
+    }
 }
