@@ -9,7 +9,12 @@ class WhitelistStore {
     }
 
     static func saveDomain(_ domain: String) {
-        UserDefaults.standard.set([domain], forKey: "Whitelist")
+        var whitelist = UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
+
+        if !whitelist.contains(domain) {
+            whitelist.append(domain)
+            UserDefaults.standard.set(whitelist, forKey: "Whitelist")
+        }
     }
 }
 
@@ -28,5 +33,13 @@ class WhitelistStoreTests: XCTestCase {
         WhitelistStore.saveDomain("www.apple.com")
 
         XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.apple.com"))
+    }
+
+    func test_saveDomain_whenListIsNotEmptySavesTheNewDomain() {
+        WhitelistStore.saveDomain("www.apple.com")
+        WhitelistStore.saveDomain("www.google.com")
+
+        XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.apple.com"))
+        XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.google.com"))
     }
 }
