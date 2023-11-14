@@ -7,7 +7,7 @@ public class WhitelistStore {
         return whitelist.contains(domain)
     }
 
-    public  static func fetchRegisteredDomains() -> [String] {
+    public static func fetchRegisteredDomains() -> [String] {
         UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
     }
 
