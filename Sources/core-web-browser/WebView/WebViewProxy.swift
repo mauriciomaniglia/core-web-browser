@@ -18,25 +18,24 @@ public final class WebViewProxy: NSObject, WebViewContract {
     }
 
     public func registerRule(name: String, content: String, whitelist: [String] = []) {
-        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { [ruleStore] ruleList, _ in
             if ruleList != nil { return }
 
             var modifiedContent = content
 
-            if whitelist.count > 0 {
-                guard let range = content.range(of: "]", options: String.CompareOptions.backwards) else { return }
-                modifiedContent = modifiedContent.replacingCharacters(in: range, with: self.whitelistAsJSON(whitelist)  + "]")
+            if whitelist.count > 0, let range = content.range(of: "]", options: String.CompareOptions.backwards) {
+                modifiedContent = modifiedContent.replacingCharacters(in: range, with: WebViewProxy.whitelistAsJSON(whitelist)  + "]")
             }
 
-            self.ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: modifiedContent, completionHandler: {_, _ in })
+            ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: modifiedContent, completionHandler: {_, _ in })
         })
     }
 
     public func applyRule(name: String) {
-        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { [webView] ruleList, _ in
             guard let ruleList = ruleList else { return }
 
-            self.webView.configuration.userContentController.add(ruleList)
+            webView.configuration.userContentController.add(ruleList)
         })
     }
 
@@ -90,8 +89,7 @@ public final class WebViewProxy: NSObject, WebViewContract {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
 
-    private func whitelistAsJSON(_ whitelist: [String]) -> String {
-        // Note that * is added to the front of domains, so foo.com becomes *foo.com
+    private static func whitelistAsJSON(_ whitelist: [String]) -> String {
         let list = "'*" + whitelist.joined(separator: "','*") + "'"
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
