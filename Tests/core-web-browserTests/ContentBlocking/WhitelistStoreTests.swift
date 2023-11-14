@@ -1,32 +1,6 @@
 import XCTest
 import core_web_browser
 
-class WhitelistStore {
-    static func isRegisteredDomain(_ domain: String) -> Bool {
-        let whitelist = UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
-
-        return whitelist.contains(domain)
-    }
-
-    static func saveDomain(_ domain: String) {
-        var whitelist = UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
-
-        if !whitelist.contains(domain) {
-            whitelist.append(domain)
-            UserDefaults.standard.set(whitelist, forKey: "Whitelist")
-        }
-    }
-
-    static func removeDomain(_ domain: String) {
-        var whitelist = UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
-
-        if let index = whitelist.firstIndex(of: domain) {
-            whitelist.remove(at: index)
-            UserDefaults.standard.set(whitelist, forKey: "Whitelist")
-        }
-    }
-}
-
 class WhitelistStoreTests: XCTestCase {
     override func tearDown() {
         clearWhitelist()
