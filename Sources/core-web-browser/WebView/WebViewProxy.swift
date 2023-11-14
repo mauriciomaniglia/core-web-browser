@@ -21,7 +21,14 @@ public final class WebViewProxy: NSObject, WebViewContract {
         ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
             if ruleList != nil { return }
 
-            self.ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: content, completionHandler: {_, _ in })
+            var modifiedContent = content
+
+            if whitelist.count > 0 {
+                guard let range = content.range(of: "]", options: String.CompareOptions.backwards) else { return }
+                modifiedContent = modifiedContent.replacingCharacters(in: range, with: self.whitelistAsJSON(whitelist)  + "]")
+            }
+
+            self.ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: modifiedContent, completionHandler: {_, _ in })
         })
     }
 
@@ -81,6 +88,12 @@ public final class WebViewProxy: NSObject, WebViewContract {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
+    }
+
+    private func whitelistAsJSON(_ whitelist: [String]) -> String {
+        // Note that * is added to the front of domains, so foo.com becomes *foo.com
+        let list = "'*" + whitelist.joined(separator: "','*") + "'"
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 }
 
