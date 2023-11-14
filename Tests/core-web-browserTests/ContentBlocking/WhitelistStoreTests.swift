@@ -59,4 +59,14 @@ class WhitelistStoreTests: XCTestCase {
 
         XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
     }
+
+    func test_removeDomain_whenTheSameDomainIsRegisteredMoreThanOnceRemoveFromTheList() {
+        WhitelistStore.saveDomain("www.apple.com")
+        WhitelistStore.saveDomain("www.apple.com")
+        WhitelistStore.saveDomain("www.apple.com")
+
+        WhitelistStore.removeDomain("www.apple.com")
+
+        XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
+    }
 }
