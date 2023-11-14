@@ -7,6 +7,10 @@ public class WhitelistStore {
         return whitelist.contains(domain)
     }
 
+    public  static func fetchRegisteredDomains() -> [String] {
+        UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
+    }
+
     public static func saveDomain(_ domain: String) {
         var whitelist = fetchRegisteredDomains()
 
@@ -23,10 +27,6 @@ public class WhitelistStore {
             whitelist.remove(at: index)
             registerDomains(whitelist)
         }
-    }
-
-    private static func fetchRegisteredDomains() -> [String] {
-        UserDefaults.standard.stringArray(forKey: "Whitelist") ?? []
     }
 
     private static func registerDomains(_ domains: [String]) {

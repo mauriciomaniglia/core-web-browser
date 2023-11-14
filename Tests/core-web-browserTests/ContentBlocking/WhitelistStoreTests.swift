@@ -10,6 +10,10 @@ class WhitelistStoreTests: XCTestCase {
         XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
     }
 
+    func test_fetchRegisteredDomains_whenThereIsNoRegisteredDomainReturnsEmpty() {
+        XCTAssertTrue(WhitelistStore.fetchRegisteredDomains().isEmpty)
+    }
+
     func test_saveDomain_whenListIsEmptySavesTheNewDomain() {
         XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
 
