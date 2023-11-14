@@ -29,7 +29,7 @@ class WhitelistStore {
 
 class WhitelistStoreTests: XCTestCase {
     override func tearDown() {
-        UserDefaults.standard.set([], forKey: "Whitelist")
+        clearWhitelist()
     }
 
     func test_isRegisteredDomain_whenListIsEmptyReturnsFalse() {
@@ -80,5 +80,11 @@ class WhitelistStoreTests: XCTestCase {
         XCTAssertFalse(WhitelistStore.isRegisteredDomain("www.apple.com"))
         XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.google.com"))
         XCTAssertTrue(WhitelistStore.isRegisteredDomain("www.youtube.com"))
+    }
+
+    // MARK: - Helpers
+
+    private func clearWhitelist() {
+        UserDefaults.standard.set([], forKey: "Whitelist")
     }
 }
