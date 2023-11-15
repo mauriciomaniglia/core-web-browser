@@ -29,6 +29,27 @@ class ContentBlockingTests: XCTestCase {
         ])
     }
 
+    func test_setupBasicProtection_whenWhitelistAreAvailableApplyCorrectRules() {
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
+        let whitelist = ["www.apple.com", "www.google.com"]
+
+        sut.setupBasicProtection(whitelist: whitelist)
+
+        XCTAssertEqual(webView.receivedMessages, [
+            .registerRule("CookiesAdvertisingRules", "json content", whitelist),
+            .applyRule("CookiesAdvertisingRules"),
+            .registerRule("CookiesAnalyticsRules", "json content", whitelist),
+            .applyRule("CookiesAnalyticsRules"),
+            .registerRule("CookiesSocialRules", "json content", whitelist),
+            .applyRule("CookiesSocialRules"),
+            .registerRule("CryptominingRules", "json content", whitelist),
+            .applyRule("CryptominingRules"),
+            .registerRule("FingerprintingRules", "json content", whitelist),
+            .applyRule("FingerprintingRules")
+        ])
+    }
+
     func test_setupStrictProtection_applyCorrectRules() {
         let webView = WebViewSpy()
         let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
@@ -45,6 +66,27 @@ class ContentBlockingTests: XCTestCase {
             .registerRule("CryptominingRules", "json content"),
             .applyRule("CryptominingRules"),
             .registerRule("FingerprintingRules", "json content"),
+            .applyRule("FingerprintingRules")
+        ])
+    }
+
+    func test_setupStrictProtection_whenWhitelistAreAvailableApplyCorrectRules() {
+        let webView = WebViewSpy()
+        let sut = ContentBlocking(webView: webView, jsonLoader: { _ in "json content"})
+        let whitelist = ["www.apple.com", "www.google.com"]
+
+        sut.setupStrictProtection(whitelist: whitelist)
+
+        XCTAssertEqual(webView.receivedMessages, [
+            .registerRule("AdvertisingRules", "json content", whitelist),
+            .applyRule("AdvertisingRules"),
+            .registerRule("AnalyticsRules", "json content", whitelist),
+            .applyRule("AnalyticsRules"),
+            .registerRule("SocialRules", "json content", whitelist),
+            .applyRule("SocialRules"),
+            .registerRule("CryptominingRules", "json content", whitelist),
+            .applyRule("CryptominingRules"),
+            .registerRule("FingerprintingRules", "json content", whitelist),
             .applyRule("FingerprintingRules")
         ])
     }

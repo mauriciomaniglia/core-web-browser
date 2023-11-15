@@ -17,19 +17,25 @@ public final class WebViewProxy: NSObject, WebViewContract {
         registerObserversForWebView()
     }
 
-    public func registerRule(name: String, content: String) {
-        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+    public func registerRule(name: String, content: String, whitelist: [String] = []) {
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { [ruleStore] ruleList, _ in
             if ruleList != nil { return }
 
-            self.ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: content, completionHandler: {_, _ in })
+            var modifiedContent = content
+
+            if whitelist.count > 0, let range = content.range(of: "]", options: String.CompareOptions.backwards) {
+                modifiedContent = modifiedContent.replacingCharacters(in: range, with: WebViewProxy.whitelistAsJSON(whitelist)  + "]")
+            }
+
+            ruleStore.compileContentRuleList(forIdentifier: name, encodedContentRuleList: modifiedContent, completionHandler: {_, _ in })
         })
     }
 
     public func applyRule(name: String) {
-        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { ruleList, _ in
+        ruleStore.lookUpContentRuleList(forIdentifier: name, completionHandler: { [webView] ruleList, _ in
             guard let ruleList = ruleList else { return }
 
-            self.webView.configuration.userContentController.add(ruleList)
+            webView.configuration.userContentController.add(ruleList)
         })
     }
 
@@ -81,6 +87,11 @@ public final class WebViewProxy: NSObject, WebViewContract {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
+    }
+
+    private static func whitelistAsJSON(_ whitelist: [String]) -> String {
+        let list = "'*" + whitelist.joined(separator: "','*") + "'"
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 }
 

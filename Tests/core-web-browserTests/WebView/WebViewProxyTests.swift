@@ -139,11 +139,22 @@ class WebViewProxyTests: XCTestCase {
     func test_registerRule_whenRuleIsNotRegisteredThenRequestRegistration() {
         let (sut, _, ruleStore, _) = makeSUT()
 
-        sut.registerRule(name: "advertising", content: "any")
+        sut.registerRule(name: "advertising", content: "[any-content]")
         ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
 
         XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),
-                                                    .compileContentRuleList(identifier: "advertising")])
+                                                    .compileContentRuleList(identifier: "advertising", encodedContentRuleList: "[any-content]")])
+    }
+
+    func test_registerRule_whenRuleIsNotRegisteredAndHasWhitelistThenRequestRegistrationWithWhitelist() {
+        let (sut, _, ruleStore, _) = makeSUT()
+        let expectedContent = "[some-content, {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': ['*www.apple.com','*www.google.com'] }}]".replacingOccurrences(of: "'", with: "\"")
+
+        sut.registerRule(name: "advertising", content: "[some-content]", whitelist: ["www.apple.com", "www.google.com"])
+        ruleStore.simulateLookUpContentRuleListWithUnregisteredItem()
+
+        XCTAssertEqual(ruleStore.receivedMessages, [.lookUpContentRuleList(identifier: "advertising"),
+                                                    .compileContentRuleList(identifier: "advertising", encodedContentRuleList: expectedContent)])
     }
 
     func test_applyRule_whenRuleIsNotRegisterDoNotApplyRule() {
@@ -268,7 +279,7 @@ class WebViewProxyTests: XCTestCase {
     private class WKContentRuleListStoreSpy: WKContentRuleListStore {
         enum Message: Equatable {
             case lookUpContentRuleList(identifier: String)
-            case compileContentRuleList(identifier: String)
+            case compileContentRuleList(identifier: String, encodedContentRuleList: String = "")
         }
 
         var receivedMessages = [Message]()
@@ -280,7 +291,7 @@ class WebViewProxyTests: XCTestCase {
         }
 
         override func compileContentRuleList(forIdentifier identifier: String!, encodedContentRuleList: String!, completionHandler: ((WKContentRuleList?, Error?) -> Void)!) {
-            receivedMessages.append(.compileContentRuleList(identifier: identifier))
+            receivedMessages.append(.compileContentRuleList(identifier: identifier, encodedContentRuleList: encodedContentRuleList))
             super.compileContentRuleList(forIdentifier: identifier, encodedContentRuleList: encodedContentRuleList, completionHandler: completionHandler)
         }
 
