@@ -4,7 +4,6 @@ public protocol WebViewContract {
     func registerRule(name: String, content: String, whitelist: [String])
     func applyRule(name: String)
     func removeAllRules()
-    func showWebView()
     func load(_ url: URL)
     func didTapBackButton()
     func didTapForwardButton()

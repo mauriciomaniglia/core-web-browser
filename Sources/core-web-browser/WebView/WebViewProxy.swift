@@ -43,10 +43,6 @@ public final class WebViewProxy: NSObject, WebViewContract {
         self.webView.configuration.userContentController.removeAllContentRuleLists()
     }
 
-    public func showWebView() {
-        webView.isHidden = false
-    }
-
     public func load(_ url: URL) {
         webView.load(URLRequest(url: url))
     }

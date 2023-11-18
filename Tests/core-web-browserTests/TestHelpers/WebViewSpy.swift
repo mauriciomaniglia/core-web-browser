@@ -6,7 +6,6 @@ class WebViewSpy: WebViewContract {
         case registerRule(_ name: String, _ content: String, _ whitelist: [String] = [])
         case applyRule(_ name: String)
         case removeAllRules
-        case showWebView
         case load(url: URL)
         case didTapBackButton
         case didTapForwardButton
@@ -26,10 +25,6 @@ class WebViewSpy: WebViewContract {
 
     func removeAllRules() {
         receivedMessages.append(.removeAllRules)
-    }
-
-    func showWebView() {
-        receivedMessages.append(.showWebView)
     }
 
     func load(_ url: URL) {

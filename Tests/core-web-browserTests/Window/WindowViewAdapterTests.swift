@@ -8,7 +8,7 @@ class WindowViewAdapterTests: XCTestCase {
 
         sut.didRequestSearch("www.apple.com")
 
-        XCTAssertEqual(webView.receivedMessages, [.showWebView, .load(url: URL(string: "http://www.apple.com")!)])
+        XCTAssertEqual(webView.receivedMessages, [.load(url: URL(string: "http://www.apple.com")!)])
         XCTAssertEqual(presenter.receivedMessages, [])
     }
 

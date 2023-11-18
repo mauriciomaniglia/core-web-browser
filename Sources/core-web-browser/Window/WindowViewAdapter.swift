@@ -8,7 +8,6 @@ public final class WindowViewAdapter: WindowViewContract {
     }
 
     public func didRequestSearch(_ text: String) {
-        webView.showWebView()
         webView.load(SearchURLBuilder.makeURL(from: text))
     }
 
