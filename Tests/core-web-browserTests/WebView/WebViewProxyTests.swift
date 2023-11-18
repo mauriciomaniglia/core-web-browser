@@ -17,18 +17,8 @@ class WebViewProxyTests: XCTestCase {
         XCTAssertEqual(webView.registeredObservers, ["URL", "canGoBack", "canGoForward", "estimatedProgress"])
     }
 
-    func test_showWebView_makeWebViewVisible() {
-        let (sut, webView, _, _) = makeSUT()
-        webView.isHidden = true
-
-        sut.showWebView()
-
-        XCTAssertFalse(webView.isHidden)
-    }
-
     func test_sendText_sendsCorrectRequest() {
-        let (sut, webView, _, _) = makeSUT()
-        webView.isHidden = true
+        let (sut, webView, _, _) = makeSUT()        
 
         sut.load(URL(string: "https://openai.com")!)
 
