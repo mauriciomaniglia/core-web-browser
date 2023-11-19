@@ -5,7 +5,9 @@ public class WindowPresenter {
     public init() {
         model = WindowPresentableModel(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: false,
+            showPrivacyReportButton: false,
             showWebView: false,
             canGoBack: false,
             canGoForward: false)
@@ -14,7 +16,9 @@ public class WindowPresenter {
     public func didStartNewWindow() {
         didUpdatePresentableModel?(.init(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: false,
+            showPrivacyReportButton: false,
             showWebView: false,
             canGoBack: false,
             canGoForward: false))
@@ -23,7 +27,9 @@ public class WindowPresenter {
     public func didStartEditing() {
         let newModel = WindowPresentableModel(
             showCancelButton: true,
+            showStopButton: false,
             showReloadButton: false,
+            showPrivacyReportButton: false,
             showWebView: model.showWebView,
             canGoBack: model.canGoBack,
             canGoForward: model.canGoForward)
@@ -35,7 +41,9 @@ public class WindowPresenter {
     public func didEndEditing() {
         let newModel = WindowPresentableModel(
             showCancelButton: false,
+            showStopButton: model.showStopButton,
             showReloadButton: model.showReloadButton,
+            showPrivacyReportButton: model.showPrivacyReportButton,
             showWebView: model.showWebView,
             canGoBack: model.canGoBack,
             canGoForward: model.canGoForward)
@@ -47,7 +55,9 @@ public class WindowPresenter {
     public func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
         let newModel = WindowPresentableModel(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: true,
+            showPrivacyReportButton: true,
             showWebView: true,
             canGoBack: canGoBack,
             canGoForward: canGoForward)
@@ -58,8 +68,10 @@ public class WindowPresenter {
 
     public func didUpdateProgressBar(_ value: Double) {
         didUpdatePresentableModel?(.init(
-            showCancelButton: true,
+            showCancelButton: false,
+            showStopButton: true,
             showReloadButton: false,
+            showPrivacyReportButton: true,
             showWebView: true,
             canGoBack: model.canGoBack,
             canGoForward: model.canGoForward,
