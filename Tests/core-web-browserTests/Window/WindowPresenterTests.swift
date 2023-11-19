@@ -11,7 +11,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didStartNewWindow()
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertFalse(receivedResult!.showPrivacyReportButton)
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
@@ -27,7 +29,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didStartNewWindow()
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertFalse(receivedResult!.showPrivacyReportButton)
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
@@ -42,7 +46,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didStartEditing()
 
         XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertFalse(receivedResult!.showPrivacyReportButton)
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
@@ -58,8 +64,10 @@ class WindowPresenterTests: XCTestCase {
         sut.didStartEditing()
 
         XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
         XCTAssertTrue(receivedResult!.showWebView)
+        XCTAssertFalse(receivedResult!.showPrivacyReportButton)
         XCTAssertTrue(receivedResult!.canGoBack)
         XCTAssertTrue(receivedResult!.canGoForward)
         XCTAssertNil(receivedResult!.progressBar)
@@ -73,7 +81,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didEndEditing()
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertFalse(receivedResult!.showPrivacyReportButton)
         XCTAssertFalse(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
@@ -89,7 +99,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didEndEditing()
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertTrue(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showPrivacyReportButton)
         XCTAssertTrue(receivedResult!.showWebView)
         XCTAssertTrue(receivedResult!.canGoBack)
         XCTAssertTrue(receivedResult!.canGoForward)
@@ -104,7 +116,9 @@ class WindowPresenterTests: XCTestCase {
         sut.didLoadPage(canGoBack: true, canGoForward: true)
 
         XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showStopButton)
         XCTAssertTrue(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showPrivacyReportButton)
         XCTAssertTrue(receivedResult!.showWebView)
         XCTAssertTrue(receivedResult!.canGoBack)
         XCTAssertTrue(receivedResult!.canGoForward)
@@ -118,8 +132,10 @@ class WindowPresenterTests: XCTestCase {
 
         sut.didUpdateProgressBar(45)
 
-        XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertTrue(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showPrivacyReportButton)
         XCTAssertTrue(receivedResult!.showWebView)
         XCTAssertFalse(receivedResult!.canGoBack)
         XCTAssertFalse(receivedResult!.canGoForward)
@@ -134,8 +150,10 @@ class WindowPresenterTests: XCTestCase {
         sut.didLoadPage(canGoBack: true, canGoForward: true)
         sut.didUpdateProgressBar(45)
 
-        XCTAssertTrue(receivedResult!.showCancelButton)
+        XCTAssertFalse(receivedResult!.showCancelButton)
+        XCTAssertTrue(receivedResult!.showStopButton)
         XCTAssertFalse(receivedResult!.showReloadButton)
+        XCTAssertTrue(receivedResult!.showPrivacyReportButton)
         XCTAssertTrue(receivedResult!.showWebView)
         XCTAssertTrue(receivedResult!.canGoBack)
         XCTAssertTrue(receivedResult!.canGoForward)

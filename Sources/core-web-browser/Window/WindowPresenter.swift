@@ -1,73 +1,80 @@
 public class WindowPresenter {
     public var didUpdatePresentableModel: ((WindowPresentableModel) -> Void)?
-    private var currentPresentableModel: WindowPresentableModel
+    private var model: WindowPresentableModel
 
     public init() {
-        currentPresentableModel = WindowPresentableModel(
+        model = WindowPresentableModel(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: false,
+            showPrivacyReportButton: false,
             showWebView: false,
             canGoBack: false,
-            canGoForward: false,
-            progressBar: nil)
+            canGoForward: false)
     }
 
     public func didStartNewWindow() {
         didUpdatePresentableModel?(.init(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: false,
+            showPrivacyReportButton: false,
             showWebView: false,
             canGoBack: false,
-            canGoForward: false,
-            progressBar: nil))
+            canGoForward: false))
     }
 
     public func didStartEditing() {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: true,
+            showStopButton: false,
             showReloadButton: false,
-            showWebView: currentPresentableModel.showWebView,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
-            progressBar: nil)
+            showPrivacyReportButton: false,
+            showWebView: model.showWebView,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didEndEditing() {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: false,
-            showReloadButton: currentPresentableModel.showReloadButton,
-            showWebView: currentPresentableModel.showWebView,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
-            progressBar: nil)
+            showStopButton: model.showStopButton,
+            showReloadButton: model.showReloadButton,
+            showPrivacyReportButton: model.showPrivacyReportButton,
+            showWebView: model.showWebView,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: false,
+            showStopButton: false,
             showReloadButton: true,
+            showPrivacyReportButton: true,
             showWebView: true,
             canGoBack: canGoBack,
-            canGoForward: canGoForward,
-            progressBar: nil)
+            canGoForward: canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didUpdateProgressBar(_ value: Double) {
         didUpdatePresentableModel?(.init(
-            showCancelButton: true,
+            showCancelButton: false,
+            showStopButton: true,
             showReloadButton: false,
+            showPrivacyReportButton: true,
             showWebView: true,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward,
             progressBar: value))
     }
 }
