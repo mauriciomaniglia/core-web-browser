@@ -4,5 +4,5 @@ public struct WindowPresentableModel {
     public let showWebView: Bool
     public let canGoBack: Bool
     public let canGoForward: Bool
-    public let progressBar: Double?
+    public var progressBar: Double? = nil
 }

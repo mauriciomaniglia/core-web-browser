@@ -1,15 +1,14 @@
 public class WindowPresenter {
     public var didUpdatePresentableModel: ((WindowPresentableModel) -> Void)?
-    private var currentPresentableModel: WindowPresentableModel
+    private var model: WindowPresentableModel
 
     public init() {
-        currentPresentableModel = WindowPresentableModel(
+        model = WindowPresentableModel(
             showCancelButton: false,
             showReloadButton: false,
             showWebView: false,
             canGoBack: false,
-            canGoForward: false,
-            progressBar: nil)
+            canGoForward: false)
     }
 
     public func didStartNewWindow() {
@@ -18,47 +17,43 @@ public class WindowPresenter {
             showReloadButton: false,
             showWebView: false,
             canGoBack: false,
-            canGoForward: false,
-            progressBar: nil))
+            canGoForward: false))
     }
 
     public func didStartEditing() {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: true,
             showReloadButton: false,
-            showWebView: currentPresentableModel.showWebView,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
-            progressBar: nil)
+            showWebView: model.showWebView,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didEndEditing() {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: false,
-            showReloadButton: currentPresentableModel.showReloadButton,
-            showWebView: currentPresentableModel.showWebView,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
-            progressBar: nil)
+            showReloadButton: model.showReloadButton,
+            showWebView: model.showWebView,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didLoadPage(canGoBack: Bool, canGoForward: Bool) {
-        let newPresentableModel = WindowPresentableModel(
+        let newModel = WindowPresentableModel(
             showCancelButton: false,
             showReloadButton: true,
             showWebView: true,
             canGoBack: canGoBack,
-            canGoForward: canGoForward,
-            progressBar: nil)
+            canGoForward: canGoForward)
 
-        currentPresentableModel = newPresentableModel
-        didUpdatePresentableModel?(newPresentableModel)
+        model = newModel
+        didUpdatePresentableModel?(newModel)
     }
 
     public func didUpdateProgressBar(_ value: Double) {
@@ -66,8 +61,8 @@ public class WindowPresenter {
             showCancelButton: true,
             showReloadButton: false,
             showWebView: true,
-            canGoBack: currentPresentableModel.canGoBack,
-            canGoForward: currentPresentableModel.canGoForward,
+            canGoBack: model.canGoBack,
+            canGoForward: model.canGoForward,
             progressBar: value))
     }
 }
